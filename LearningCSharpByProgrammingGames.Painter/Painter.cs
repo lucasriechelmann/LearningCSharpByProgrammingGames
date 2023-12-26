@@ -10,10 +10,11 @@ namespace LearningCSharpByProgrammingGames.Painter
 {
     public class Painter : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
         InputHelper _inputHelper;
-        GameWorld _gameWorld;
+        static GameWorld _gameWorld;
+        public static GameWorld GameWorld => _gameWorld;
         public static Vector2 ScreenSize { get; set; }
         public static Random Random { get; private set; }
         public Painter()
@@ -46,18 +47,13 @@ namespace LearningCSharpByProgrammingGames.Painter
             _inputHelper.Update();
             _gameWorld.HandleInput(_inputHelper);
             _gameWorld.Update(gameTime);
-
-            base.Update(gameTime);
         }
         
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             _gameWorld.Draw(gameTime, _spriteBatch);
-
-            base.Draw(gameTime);
         }
     }
 }

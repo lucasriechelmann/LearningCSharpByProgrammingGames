@@ -7,94 +7,59 @@ using System;
 using System.Reflection.Metadata;
 
 namespace LearningCSharpByProgrammingGames.Painter.Objects;
-public class Cannon
+public class Cannon : ThreeColorGameObject
 {    
     Texture2D _cannonBarrel;
-    Texture2D _colorRed, _colorGreen, _colorBlue;
-    Vector2 _barrelPosition, _barrelOrigin, _colorOrigin;
-    ObjectColor _currentColor;
-    float _angle;
+    Vector2 _barrelOrigin;
+    float _barrelRotation;
     
-    public Cannon(ContentManager content) 
+    public Cannon(ContentManager content) : base(content, "spr_cannon_red", "spr_cannon_green", "spr_cannon_blue")
     {         
         _cannonBarrel = content.Load<Texture2D>("spr_cannon_barrel");
-        _colorRed = content.Load<Texture2D>("spr_cannon_red");
-        _colorGreen = content.Load<Texture2D>("spr_cannon_green");
-        _colorBlue = content.Load<Texture2D>("spr_cannon_blue");
-
-        _currentColor = ObjectColor.Blue;
-
-        _barrelOrigin = new Vector2(_cannonBarrel.Height, _cannonBarrel.Height) / 2;
-        _barrelPosition = new Vector2(72, 405);
-        _colorOrigin = new Vector2(_colorRed.Width, _colorRed.Height) / 2;
+        _position = new Vector2(72, 405);
+        _barrelOrigin = new Vector2(_cannonBarrel.Height / 2, _cannonBarrel.Height / 2);
     }
-    public void HandleInput(InputHelper inputHelper)
+    public override void HandleInput(InputHelper inputHelper)
     {
+        // change the color when the player presses R/G/B
         if (inputHelper.KeyPressed(Keys.R))
-            _currentColor = ObjectColor.Red;
-        if (inputHelper.KeyPressed(Keys.G))
-            _currentColor = ObjectColor.Green;
-        if (inputHelper.KeyPressed(Keys.B))
-            _currentColor = ObjectColor.Blue;
-
-        double opposite = inputHelper.MousePosition.Y - _barrelPosition.Y;
-        double adjacent = inputHelper.MousePosition.X - _barrelPosition.X;
-        _angle = (float)Math.Atan2(opposite, adjacent);
-    }
-    public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-    {
-        spriteBatch.Draw(_cannonBarrel, 
-            _barrelPosition, 
-            null, 
-            Color.White,
-            _angle, 
-            _barrelOrigin, 
-            1f, 
-            SpriteEffects.None, 
-            0f);
-        
-        spriteBatch.Draw(_currentColor switch
         {
-            ObjectColor.Red => _colorRed,
-            ObjectColor.Green => _colorGreen,
-            ObjectColor.Blue => _colorBlue,
-            _ => throw new NotImplementedException(),
-        }, _barrelPosition, null, Color.White, 0f, _colorOrigin, 1f, SpriteEffects.None, 0f);
-    }
-    public void Reset()
-    {
-        _currentColor = ObjectColor.Blue;
-        _angle = 0f;
-    }
-    public Vector2 Position => _barrelPosition;
-    public Color Color
-    {
-        get => _currentColor switch
-        {
-            ObjectColor.Red => Color.Red,
-            ObjectColor.Green => Color.Green,
-            ObjectColor.Blue => Color.Blue,
-            _ => throw new NotImplementedException(),
-        };
-        set
-        {
-            if(value == Color.Red)
-                _currentColor = ObjectColor.Red;
-            
-            if (value == Color.Green)
-                _currentColor = ObjectColor.Green;
-            
-            if (value == Color.Blue)
-                _currentColor = ObjectColor.Blue;
+            Color = Color.Red;
         }
+        else if (inputHelper.KeyPressed(Keys.G))
+        {
+            Color = Color.Green;
+        }
+        else if (inputHelper.KeyPressed(Keys.B))
+        {
+            Color = Color.Blue;
+        }
+
+        // change the angle depending on the mouse position
+        double opposite = inputHelper.MousePosition.Y - _position.Y;
+        double adjacent = inputHelper.MousePosition.X - _position.X;
+        _barrelRotation = (float)Math.Atan2(opposite, adjacent);
     }
+
+    public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(_cannonBarrel, _position, null, Color.White, _barrelRotation, _barrelOrigin, 1.0f, SpriteEffects.None, 0);
+        base.Draw(gameTime, spriteBatch);
+    }
+
+    public override void Reset()
+    {
+        base.Reset();
+        _barrelRotation = 0f;
+    }
+
     public Vector2 BallPosition
     {
         get
         {
-            float opposite = (float)Math.Sin(_angle) * _cannonBarrel.Width * 0.75f;
-            float adjacent = (float)Math.Cos(_angle) * _cannonBarrel.Width * 0.75f;
-            return _barrelPosition + new Vector2(adjacent, opposite);
+            float opposite = (float)Math.Sin(_barrelRotation) * _cannonBarrel.Width * 0.75f;
+            float adjacent = (float)Math.Cos(_barrelRotation) * _cannonBarrel.Width * 0.75f;
+            return _position + new Vector2(adjacent, opposite);
         }
     }
 }
