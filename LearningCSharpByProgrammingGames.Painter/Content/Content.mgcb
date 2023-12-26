@@ -22,7 +22,7 @@
 
 #begin snd_collect_points.wma
 /importer:WmaImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:snd_collect_points.wma
 
