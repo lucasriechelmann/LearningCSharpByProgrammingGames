@@ -10,7 +10,9 @@ public class Ball
 {
     Texture2D _colorRed, _colorGreen, _colorBlue;
     Vector2 _position, _origin;
+    Vector2 _velocity;
     ObjectColor _color;
+    bool _shooting;
     public Ball(ContentManager content)
     {
         _colorRed = content.Load<Texture2D>("spr_ball_red");
@@ -19,11 +21,27 @@ public class Ball
         _origin = new Vector2(_colorRed.Width / 2.0f, _colorRed.Height / 2.0f);
         Reset();
     }
-    public void HandleInput(InputHelper inputHelper)
+    public void HandleInput(InputHelper inputHelper, Cannon cannon)
     {
+        if (inputHelper.MouseLeftButtonPressed && !_shooting)
+        {
+            _shooting = true;
+            _velocity = (inputHelper.MousePosition - cannon.Position) * 1.2f;
+        }
     }
     public void Update(GameTime gameTime, Cannon cannon)
     {
+        if (_shooting)
+        {
+            var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _velocity.Y += 400.0f * dt;
+            _position += _velocity * dt;
+
+            if (GameWorld.IsOutsideWorld(_position))
+                Reset();
+            return;
+        }
+
         Color = cannon.Color;
         _position = cannon.BallPosition;
     }
@@ -45,10 +63,21 @@ public class Ball
     }
     public void Reset()
     {
-        _position = new Vector2(65, 390);
+        _position = new Vector2(65, 390);        
+        _velocity = Vector2.Zero;
         _color = ObjectColor.Blue;
+        _shooting = false;
     }
     public Vector2 Position => _position;
+    public Rectangle BoundingBox
+    {
+        get
+        {
+            Rectangle spriteBounds = _colorRed.Bounds;
+            spriteBounds.Offset(_position - _origin);
+            return spriteBounds;
+        }
+    }
     public Color Color
     {
         get => _color switch

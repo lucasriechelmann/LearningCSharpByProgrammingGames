@@ -14,7 +14,7 @@ public class Cannon
     Vector2 _barrelPosition, _barrelOrigin, _colorOrigin;
     ObjectColor _currentColor;
     float _angle;
-    bool _shooting;
+    
     public Cannon(ContentManager content) 
     {         
         _cannonBarrel = content.Load<Texture2D>("spr_cannon_barrel");

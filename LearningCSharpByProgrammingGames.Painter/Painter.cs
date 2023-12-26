@@ -14,7 +14,8 @@ namespace LearningCSharpByProgrammingGames.Painter
         private SpriteBatch _spriteBatch;
         InputHelper _inputHelper;
         GameWorld _gameWorld;
-        
+        public static Vector2 ScreenSize { get; set; }
+        public static Random Random { get; private set; }
         public Painter()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -25,7 +26,7 @@ namespace LearningCSharpByProgrammingGames.Painter
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            ScreenSize = new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             base.Initialize();
         }
 
@@ -34,6 +35,7 @@ namespace LearningCSharpByProgrammingGames.Painter
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _inputHelper = new InputHelper();
             _gameWorld = new GameWorld(Content);
+            Random = new Random();
         }
 
         protected override void Update(GameTime gameTime)
