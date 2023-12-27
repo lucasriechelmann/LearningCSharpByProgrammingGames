@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace LearningCSharpByProgrammingGames.Painter;
 /// <summary>
@@ -16,7 +17,7 @@ public class GameWorld
     SpriteFont _gameFont;
     // game objects: ball, paint cans, and cannon.
     Ball _ball;
-    PaintCan _can1, _can2, _can3;
+    List<PaintCan> _paintCans;
     Cannon _cannon;
     /// <summary>
     /// The current number of lives that the player has.
@@ -45,9 +46,10 @@ public class GameWorld
         // initialize game objects: cannon, ball, and paint cans
         _cannon = new Cannon(content);
         _ball = new Ball(content);
-        _can1 = new PaintCan(content, 480f, Color.Red);
-        _can2 = new PaintCan(content, 610f, Color.Green);
-        _can3 = new PaintCan(content, 740f, Color.Blue);
+        _paintCans = new List<PaintCan>();
+        _paintCans.Add(new PaintCan(content, 480f, Color.Red));
+        _paintCans.Add(new PaintCan(content, 610f, Color.Green));
+        _paintCans.Add(new PaintCan(content, 740f, Color.Blue));
 
         // initialize other variables
         Score = 0;
@@ -83,9 +85,8 @@ public class GameWorld
             return;
 
         _ball.Update(gameTime);
-        _can1.Update(gameTime);
-        _can2.Update(gameTime);
-        _can3.Update(gameTime);
+        foreach (PaintCan can in _paintCans)
+            can.Update(gameTime);
     }
     /// <summary>
     /// Draws the game world in its current state.
@@ -103,9 +104,9 @@ public class GameWorld
         // draw all game objects
         _ball.Draw(gameTime, spriteBatch);
         _cannon.Draw(gameTime, spriteBatch);
-        _can1.Draw(gameTime, spriteBatch);
-        _can2.Draw(gameTime, spriteBatch);
-        _can3.Draw(gameTime, spriteBatch);
+        
+        foreach (PaintCan can in _paintCans)
+            can.Draw(gameTime, spriteBatch);
 
         // draw the score
         spriteBatch.DrawString(_gameFont, "Score: " + Score, new Vector2(20, 18), Color.White);
@@ -136,12 +137,11 @@ public class GameWorld
 
         // reset all game objects
         _ball.Reset();
-        _can1.Reset();
-        _can2.Reset();
-        _can3.Reset();
-        _can1.ResetMinSpeed();
-        _can2.ResetMinSpeed();
-        _can3.ResetMinSpeed();
+        foreach (PaintCan can in _paintCans)
+        {
+            can.Reset();
+            can.ResetMinSpeed();
+        }           
     }
     /// <summary>
     /// Gets the game world's Cannon object.
@@ -154,25 +154,17 @@ public class GameWorld
     /// <summary>
     /// Decreases the player's number of lives by one.
     /// </summary>
-    public void LoseLife()
-    {
-        _lives--;
-    }
+    public void LoseLife() => _lives--;
     /// <summary>
     /// Checks and returns whether or not the game is over. 
     /// Returns true if the player has no more lives left, and false otherwise.
     /// </summary>
-    bool IsGameOver
-    {
-        get { return _lives <= 0; }
-    }
+    bool IsGameOver => _lives <= 0;
     /// <summary>
     /// Checks and returns whether a given position lies outside the screen.
     /// </summary>
     /// <param name="position">A position in the game world.</param>
     /// <returns>true if the given position lies outside the screen, and false otherwise.</returns>
-    public bool IsOutsideWorld(Vector2 position)
-    {
-        return position.X < 0 || position.X > Painter.ScreenSize.X || position.Y > Painter.ScreenSize.Y;
-    }
+    public bool IsOutsideWorld(Vector2 position) =>
+        position.X < 0 || position.X > Painter.ScreenSize.X || position.Y > Painter.ScreenSize.Y;
 }
