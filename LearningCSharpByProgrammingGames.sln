@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningCSharpByProgrammingGames.Painter", "LearningCSharpByProgrammingGames.Painter\LearningCSharpByProgrammingGames.Painter.csproj", "{65214267-1204-43D5-A316-350E6AA030A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningCSharpByProgrammingGames.Painter", "LearningCSharpByProgrammingGames.Painter\LearningCSharpByProgrammingGames.Painter.csproj", "{65214267-1204-43D5-A316-350E6AA030A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningCSharpByProgrammingGames.Engine", "LearningCSharpByProgrammingGames.Engine\LearningCSharpByProgrammingGames.Engine.csproj", "{229F7CC6-90EF-4C5E-9BDE-61E13AA59065}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningCSharpByProgrammingGames.Engine", "LearningCSharpByProgrammingGames.Engine\LearningCSharpByProgrammingGames.Engine.csproj", "{229F7CC6-90EF-4C5E-9BDE-61E13AA59065}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningCSharpByProgrammingGames.JewelJam", "LearningCSharpByProgrammingGames.JewelJam\LearningCSharpByProgrammingGames.JewelJam.csproj", "{667EAB10-42CD-42D7-BC7A-B8BC9B2B43D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{229F7CC6-90EF-4C5E-9BDE-61E13AA59065}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{229F7CC6-90EF-4C5E-9BDE-61E13AA59065}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{229F7CC6-90EF-4C5E-9BDE-61E13AA59065}.Release|Any CPU.Build.0 = Release|Any CPU
+		{667EAB10-42CD-42D7-BC7A-B8BC9B2B43D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{667EAB10-42CD-42D7-BC7A-B8BC9B2B43D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{667EAB10-42CD-42D7-BC7A-B8BC9B2B43D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{667EAB10-42CD-42D7-BC7A-B8BC9B2B43D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
