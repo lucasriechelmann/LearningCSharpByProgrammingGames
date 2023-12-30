@@ -14,41 +14,60 @@ public class ExtendedGame : Game
     protected SpriteBatch _spriteBatch;
     //An object for handling keyboard and mouse input
     protected InputHelper _inputHelper;
-    //The width and height of the game world, in game units
+    /// <summary>
+    /// The width and height of the game world, in game units.
+    /// </summary>
     protected Point _worldSize;
-    //The width and height of the window, in pixels
+    /// <summary>
+    /// The width and height of the window, in pixels.
+    /// </summary>
     protected Point _windowSize;
-    //A matrix used for scaling the game world so that it fits inside the window
+    /// <summary>
+    /// A matrix used for scaling the game world so that it fits inside the window.
+    /// </summary>
     protected Matrix _spriteScale;
+    /// <summary>
+    /// An object for generating random numbers throughout the game.
+    /// </summary>
     public static Random Random { get; private set; }
+    /// <summary>
+    /// An object for loading assets throughout the game.
+    /// </summary>
     public static ContentManager ContentManager { get; private set; }
+    /// <summary>
+    /// The game world, represented by a list of game objects.
+    /// </summary>
     protected List<GameObject> _gameWorld;
-    protected bool FullScreen
-    {
-        get => _graphics.IsFullScreen;
-        set => ApplyResolutionSettings(value);
-    }
     public ExtendedGame()
     {
         Content.RootDirectory = "Content";
         _graphics = new(this);
-        Random = new();
-        _inputHelper = new();
 
+        _inputHelper = new();
+        Random = new();
+
+        // default window and world size
         _worldSize = new Point(1024, 768);
         _windowSize = new Point(1024, 768);
-        _gameWorld = new();
+        
     }
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        // store a static reference to the ContentManager
         ContentManager = Content;
+
+        // create an empty game world
+        _gameWorld = new();
+
+        // by default, we're not running in full-screen mode
         FullScreen = false;
     }
     protected override void Update(GameTime gameTime)
     {
         HandleInput();
 
+        // let all game objects update themselves
         foreach (GameObject gameObject in _gameWorld)
             gameObject.Update(gameTime);
     }
@@ -56,12 +75,15 @@ public class ExtendedGame : Game
     {
         _inputHelper.Update();
 
+        // quit the game when the player presses ESC
         if (_inputHelper.KeyPressed(Keys.Escape))
             Exit();
 
+        // toggle full-screen mode when the player presses F5
         if (_inputHelper.KeyPressed(Keys.F5))
             FullScreen = !FullScreen;
 
+        // let all game objects do their own input handling
         foreach (GameObject gameObject in _gameWorld)
             gameObject.HandleInput(_inputHelper);
     }
@@ -69,15 +91,24 @@ public class ExtendedGame : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
+        // start drawing sprites, applying the scaling matrix
         _spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
 
+        // let all game objects draw themselves
         foreach (GameObject gameObject in _gameWorld)
             gameObject.Draw(gameTime, _spriteBatch);
 
         _spriteBatch.End();
     }
+    /// <summary>
+    /// Scales the window to the desired size, and calculates how the game world should be scaled to fit inside that window.
+    /// </summary>
     void ApplyResolutionSettings(bool fullScreen)
     {
+        // make the game full-screen or not
+        _graphics.IsFullScreen = fullScreen;
+
+        // get the size of the screen to use: either the window size or the full screen size
         Point screenSize;
         if (fullScreen)
             screenSize = new Point(
@@ -86,21 +117,33 @@ public class ExtendedGame : Game
         else
             screenSize = _windowSize;
 
-        _graphics.IsFullScreen = fullScreen;
+
+        // scale the window to the desired size
         _graphics.PreferredBackBufferWidth = screenSize.X;
         _graphics.PreferredBackBufferHeight = screenSize.Y;
+
         _graphics.ApplyChanges();
+
+        // calculate and set the viewport to use
         GraphicsDevice.Viewport = CalculateViewport(screenSize);
 
+        // calculate how the graphics should be scaled, so that the game world fits inside the window
         _spriteScale = Matrix.CreateScale(
             (float)GraphicsDevice.Viewport.Width / _worldSize.X,
             (float)GraphicsDevice.Viewport.Height / _worldSize.Y,
             1f);
     }
+    /// <summary>
+    /// Calculates and returns the viewport to use, so that the game world fits on the screen while preserving its aspect ratio.
+    /// </summary>
+    /// <param name="windowSize">The size of the screen on which the world should be drawn.</param>
+    /// <returns>A Viewport object that will show the game world as large as possible while preserving its aspect ratio.</returns>
     Viewport CalculateViewport(Point windowSize)
     {
+        // create a Viewport object
         Viewport viewport = new();
 
+        // calculate the two aspect ratios
         float gameAspectRatio = _worldSize.X / (float)_worldSize.Y;
         float windowAspectRatio = windowSize.X / (float)windowSize.Y;
 
@@ -122,6 +165,19 @@ public class ExtendedGame : Game
 
         return viewport;
     }
+    /// <summary>
+    /// Gets or sets whether the game is running in full-screen mode.
+    /// </summary>
+    protected bool FullScreen
+    {
+        get => _graphics.IsFullScreen;
+        set => ApplyResolutionSettings(value);
+    }
+    /// <summary>
+    /// Converts a position in screen coordinates to a position in world coordinates.
+    /// </summary>
+    /// <param name="screenPosition">A position in screen coordinates.</param>
+    /// <returns>The corresponding position in world coordinates.</returns>
     Vector2 ScreenToWorld(Vector2 screenPosition)
     {
         Vector2 viewportTopLeft = new(

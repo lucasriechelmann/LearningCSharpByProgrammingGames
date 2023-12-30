@@ -1,82 +1,49 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
+using LearningCSharpByProgrammingGames.JewelJam.Objects;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace LearningCSharpByProgrammingGames.JewelJam
 {
     public class JewelJamGame : ExtendedGame
     {
-        int[,] _grid;
+        /// <summary>
+        /// The width of the grid: the number of cells in the horizontal direction.
+        /// </summary>
         const int GridWidth = 5;
+        /// <summary>
+        /// The height of the grid: the number of cells in the vertical direction.
+        /// </summary>
         const int GridHeight = 10;
+        /// <summary>
+        /// The horizontal and distance between two adjacent grid cells.
+        /// </summary>
         const int CellSize = 85;
-        Vector2 _gridOffSet = new Vector2(85, 150);
-        Texture2D[] _jewels;
-        
+        /// <summary>
+        /// The position of the top-left corner of the grid in the game world.
+        /// </summary>
+        Vector2 GridOffSet = new Vector2(85, 150);             
         public JewelJamGame() : base()
         {
             IsMouseVisible = true;
-            _grid = new int[GridWidth, GridHeight];
-            for (int x = 0; x < GridWidth; x++)
-                for (int y = 0; y < GridHeight; y++)
-                    _grid[x, y] = Random.Next(3);
-        }
-        protected override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-
-            if (_inputHelper.KeyPressed(Keys.Space))
-                MoveRowsDown();
-        }
-        void MoveRowsDown()
-        {
-            for (int y = GridHeight - 1; y > 0; y--)
-            {
-                for (int x = 0; x < GridWidth; x++)
-                {
-                    _grid[x, y] = _grid[x, y - 1];
-                }
-            }
-
-            // refill the top row
-            for (int x = 0; x < GridWidth; x++)
-            {
-                _grid[x, 0] = Random.Next(3);
-            }
         }
         protected override void LoadContent()
         {
             base.LoadContent();
+
+            // add the background
             SpriteGameObject background = new("spr_background");
-            _gameWorld.Add(background);            
+            _gameWorld.Add(background);
+
+            // add the grid
+            JewelGrid jewelGrid = new(GridWidth, GridHeight, CellSize, GridOffSet);
+            _gameWorld.Add(jewelGrid);
+
+            // set the world size to the width and height of the background sprite
             _worldSize = new Point(background.Width, background.Height);
-            _windowSize = new Point(1024, 768);
-            _jewels = new Texture2D[3];
-            _jewels[0] = Content.Load<Texture2D>("spr_single_jewel1");
-            _jewels[1] = Content.Load<Texture2D>("spr_single_jewel2");
-            _jewels[2] = Content.Load<Texture2D>("spr_single_jewel3");
+
+            // to let the new world size take effect, we need to set the FullScreen property again
             FullScreen = false;
         }
         
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
-            _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
-            
-            for (int x = 0; x < GridWidth; x++)
-            {
-                for (int y = 0; y < GridHeight; y++)
-                {
-                    Vector2 position = _gridOffSet + new Vector2(x, y) * CellSize;
-                    _spriteBatch.Draw(_jewels[_grid[x, y]], position, Color.White);
-                }
-            }
-
-            _spriteBatch.End();
-        }
     }
 }
