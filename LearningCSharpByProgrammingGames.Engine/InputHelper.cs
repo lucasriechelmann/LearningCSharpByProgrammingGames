@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework.Input;
-using System.Numerics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
-namespace LearningCSharpByProgrammingGames.Painter.Managers;
+namespace LearningCSharpByProgrammingGames.Engine;
 /// <summary>
 /// A class that manages mouse and keyboard input.
 /// </summary>

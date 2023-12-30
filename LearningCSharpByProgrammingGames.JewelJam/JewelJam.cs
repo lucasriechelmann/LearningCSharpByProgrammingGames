@@ -1,119 +1,82 @@
-﻿using LearningCSharpByProgrammingGames.JewelJam.Managers;
+﻿using LearningCSharpByProgrammingGames.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace LearningCSharpByProgrammingGames.JewelJam
 {
-    public class JewelJamGame : Game
+    public class JewelJamGame : ExtendedGame
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        Texture2D _background;
-        Texture2D _jewelTest;
-        Point _worldSize, _windowSize;
-        Matrix _spriteScale;
-        InputHelper _inputHelper;
-        public JewelJamGame()
+        int[,] _grid;
+        const int GridWidth = 5;
+        const int GridHeight = 10;
+        const int CellSize = 85;
+        Vector2 _gridOffSet = new Vector2(85, 150);
+        Texture2D[] _jewels;
+        
+        public JewelJamGame() : base()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
             IsMouseVisible = true;
-        }
-        bool FullScreen
-        {
-            get  => _graphics.IsFullScreen;
-            set  => ApplyResolutionSettings(value);
-        }
-        protected override void Initialize()
-        {
-            _inputHelper = new InputHelper();
-
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _background = Content.Load<Texture2D>("spr_background");
-            _jewelTest = Content.Load<Texture2D>("spr_single_jewel1");
-            _worldSize = new Point(_background.Width, _background.Height);
-            _windowSize = new Point(1024, 768);
-            FullScreen = false;
-        }
-        void ApplyResolutionSettings(bool fullScreen)
-        {
-            Point screenSize;
-            if (fullScreen)
-                screenSize = new Point(
-                    GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
-                    GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-            else
-                screenSize = _windowSize;
-
-            _graphics.IsFullScreen = fullScreen;
-            _graphics.PreferredBackBufferWidth = screenSize.X;
-            _graphics.PreferredBackBufferHeight = screenSize.Y;
-            _graphics.ApplyChanges();
-            GraphicsDevice.Viewport = CalculateViewport(screenSize);
-            
-            _spriteScale = Matrix.CreateScale(
-                (float)GraphicsDevice.Viewport.Width / _worldSize.X,
-                (float)GraphicsDevice.Viewport.Height / _worldSize.Y,
-                1f);
-        }
-        Viewport CalculateViewport(Point windowSize)
-        {
-            Viewport viewport = new();
-
-            float gameAspectRatio = _worldSize.X / (float)_worldSize.Y;
-            float windowAspectRatio = windowSize.X / (float)windowSize.Y;
-
-            //if the window is relatively wide, use the full window height
-            if (windowAspectRatio > gameAspectRatio)
-            {
-                viewport.Width = (int)(windowSize.Y * gameAspectRatio);
-                viewport.Height = windowSize.Y;
-            }
-            //if the window is relatively high, use the full window width
-            else
-            {
-                viewport.Width = windowSize.X;
-                viewport.Height = (int)(windowSize.X / gameAspectRatio);
-            }
-
-            viewport.X = (windowSize.X - viewport.Width) / 2;
-            viewport.Y = (windowSize.Y - viewport.Height) / 2;
-
-            return viewport;
+            _grid = new int[GridWidth, GridHeight];
+            for (int x = 0; x < GridWidth; x++)
+                for (int y = 0; y < GridHeight; y++)
+                    _grid[x, y] = Random.Next(3);
         }
         protected override void Update(GameTime gameTime)
         {
-            if (_inputHelper.KeyPressed(Keys.Escape))
-                Exit();
+            base.Update(gameTime);
 
-            _inputHelper.Update();
-            if (_inputHelper.KeyPressed(Keys.F5))
-                FullScreen = !FullScreen;
+            if (_inputHelper.KeyPressed(Keys.Space))
+                MoveRowsDown();
         }
+        void MoveRowsDown()
+        {
+            for (int y = GridHeight - 1; y > 0; y--)
+            {
+                for (int x = 0; x < GridWidth; x++)
+                {
+                    _grid[x, y] = _grid[x, y - 1];
+                }
+            }
 
+            // refill the top row
+            for (int x = 0; x < GridWidth; x++)
+            {
+                _grid[x, 0] = Random.Next(3);
+            }
+        }
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            SpriteGameObject background = new("spr_background");
+            _gameWorld.Add(background);            
+            _worldSize = new Point(background.Width, background.Height);
+            _windowSize = new Point(1024, 768);
+            _jewels = new Texture2D[3];
+            _jewels[0] = Content.Load<Texture2D>("spr_single_jewel1");
+            _jewels[1] = Content.Load<Texture2D>("spr_single_jewel2");
+            _jewels[2] = Content.Load<Texture2D>("spr_single_jewel3");
+            FullScreen = false;
+        }
+        
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
             _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
-            //_spriteBatch.Draw(_jewelTest, _inputHelper.MousePosition, Color.White);
-            //_spriteBatch.Draw(_jewelTest, ScreenToWorld(_inputHelper.MousePosition), Color.White);
+            
+            for (int x = 0; x < GridWidth; x++)
+            {
+                for (int y = 0; y < GridHeight; y++)
+                {
+                    Vector2 position = _gridOffSet + new Vector2(x, y) * CellSize;
+                    _spriteBatch.Draw(_jewels[_grid[x, y]], position, Color.White);
+                }
+            }
+
             _spriteBatch.End();
-        }
-        Vector2 ScreenToWorld(Vector2 screenPosition)
-        {
-            Vector2 viewportTopLeft = new(
-                GraphicsDevice.Viewport.X,
-                GraphicsDevice.Viewport.Y);
-            float screenToWorldScale = _worldSize.X / (float)GraphicsDevice.Viewport.Width;
-            return (screenPosition - viewportTopLeft) * screenToWorldScale;
         }
     }
 }
