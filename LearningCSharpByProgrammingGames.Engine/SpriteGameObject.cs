@@ -18,7 +18,7 @@ public class SpriteGameObject : GameObject
         {
             spriteBatch.Draw(
                 _sprite, 
-                Position, 
+                GlobalPosition, 
                 null, 
                 Color.White, 
                 0f, 
@@ -39,7 +39,7 @@ public class SpriteGameObject : GameObject
         get
         {
             Rectangle spriteBounds = _sprite.Bounds;
-            spriteBounds.Offset(Position - _origin);
+            spriteBounds.Offset(LocalPosition - _origin);
             return spriteBounds;
         }
     }

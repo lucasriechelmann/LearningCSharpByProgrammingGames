@@ -5,12 +5,15 @@ namespace LearningCSharpByProgrammingGames.Engine;
 
 public class GameObject
 {
-    public Vector2 Position { get; set; }
+    public GameObject Parent { get; set; }
+    public Vector2 LocalPosition { get; set; }
+    public Vector2 GlobalPosition => 
+        Parent == null ? LocalPosition : LocalPosition + Parent.GlobalPosition;
     protected Vector2 _velocity;
     public bool Visible { get; set; }
     public GameObject()
     {
-        Position = Vector2.Zero;
+        LocalPosition = Vector2.Zero;
         _velocity = Vector2.Zero;
         Visible = true;
     }
@@ -19,7 +22,7 @@ public class GameObject
     }
     public virtual void Update(GameTime gameTime)
     {
-        Position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        LocalPosition += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
     }
     public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {

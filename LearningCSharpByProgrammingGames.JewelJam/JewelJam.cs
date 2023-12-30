@@ -32,12 +32,12 @@ namespace LearningCSharpByProgrammingGames.JewelJam
 
             // add the background
             SpriteGameObject background = new("spr_background");
-            _gameWorld.Add(background);
+            _gameWorld.AddChild(background);
 
             // add the grid
             JewelGrid jewelGrid = new(GridWidth, GridHeight, CellSize, GridOffSet);
-            _gameWorld.Add(jewelGrid);
-
+            _gameWorld.AddChild(jewelGrid);
+            
             // set the world size to the width and height of the background sprite
             _worldSize = new Point(background.Width, background.Height);
 

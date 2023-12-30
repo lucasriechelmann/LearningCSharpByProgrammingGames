@@ -4,7 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace LearningCSharpByProgrammingGames.JewelJam.Objects;
-
+/// <summary>
+/// Represents a grid of jewel objects.
+/// </summary>
 public class JewelGrid : GameObject
 {
     Jewel[,] _grid;
@@ -17,7 +19,7 @@ public class JewelGrid : GameObject
         _cellSize = cellSize;
 
         // copy the position
-        Position = offset;
+        LocalPosition = offset;
 
         Reset();
     }
@@ -34,7 +36,8 @@ public class JewelGrid : GameObject
                 // add a new jewel to the grid
                 _grid[x, y] = new Jewel(ExtendedGame.Random.Next(3));
                 // set the position of that jewel
-                _grid[x, y].Position = GetCellPosition(x, y);
+                _grid[x, y].LocalPosition = GetCellPosition(x, y);
+                _grid[x, y].Parent = this;
             }
         }
     }
@@ -59,7 +62,7 @@ public class JewelGrid : GameObject
             for (int x = 0; x < _gridWidth; x++)
             {
                 _grid[x, y] = _grid[x, y - 1];
-                _grid[x, y].Position = GetCellPosition(x, y);
+                _grid[x, y].LocalPosition = GetCellPosition(x, y);
             }
         }
 
@@ -67,7 +70,8 @@ public class JewelGrid : GameObject
         for (int x = 0; x < _gridWidth; x++)
         {
             _grid[x, 0] = new Jewel(ExtendedGame.Random.Next(3));
-            _grid[x, 0].Position = GetCellPosition(x, 0);
+            _grid[x, 0].LocalPosition = GetCellPosition(x, 0);
+            _grid[x, 0].Parent = this;
         }
     }
     /// <summary>
@@ -77,5 +81,5 @@ public class JewelGrid : GameObject
     /// <param name="y">The y-coordinate of a grid cell.</param>
     /// <returns>A Vector2 instance that represents the game world position of the given grid cell.</returns>
     Vector2 GetCellPosition(int x, int y) =>
-        Position + new Vector2(x * _cellSize, y * _cellSize);
+        new Vector2(x * _cellSize, y * _cellSize);
 }
