@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin JewelJamFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:JewelJamFont.spritefont
+
 #begin spr_background.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

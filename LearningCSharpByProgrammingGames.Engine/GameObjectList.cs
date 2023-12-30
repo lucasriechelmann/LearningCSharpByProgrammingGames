@@ -10,7 +10,11 @@ public class GameObjectList : GameObject
     {
         _list = new();
     }
-    public void AddChild(GameObject child) => _list.Add(child);
+    public void AddChild(GameObject child)
+    {
+        child.Parent = this;
+        _list.Add(child);
+    }
     public override void HandleInput(InputHelper inputHelper)
     {
         foreach (GameObject obj in _list)

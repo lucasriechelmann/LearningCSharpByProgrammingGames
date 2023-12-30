@@ -37,7 +37,7 @@ public class ExtendedGame : Game
     /// <summary>
     /// The game world, represented by a list of game objects.
     /// </summary>
-    protected GameObjectList _gameWorld;
+    protected static GameObjectList _gameWorld;
     public ExtendedGame()
     {
         Content.RootDirectory = "Content";

@@ -6,18 +6,7 @@ namespace LearningCSharpByProgrammingGames.JewelJam
 {
     public class JewelJamGame : ExtendedGame
     {
-        /// <summary>
-        /// The width of the grid: the number of cells in the horizontal direction.
-        /// </summary>
-        const int GridWidth = 5;
-        /// <summary>
-        /// The height of the grid: the number of cells in the vertical direction.
-        /// </summary>
-        const int GridHeight = 10;
-        /// <summary>
-        /// The horizontal and distance between two adjacent grid cells.
-        /// </summary>
-        const int CellSize = 85;
+        
         /// <summary>
         /// The position of the top-left corner of the grid in the game world.
         /// </summary>
@@ -30,20 +19,13 @@ namespace LearningCSharpByProgrammingGames.JewelJam
         {
             base.LoadContent();
 
-            // add the background
-            SpriteGameObject background = new("spr_background");
-            _gameWorld.AddChild(background);
+            // initialize the game world
+            _gameWorld = new JewelJamGameWorld();
 
-            // add the grid
-            JewelGrid jewelGrid = new(GridWidth, GridHeight, CellSize, GridOffSet);
-            _gameWorld.AddChild(jewelGrid);
-            
-            // set the world size to the width and height of the background sprite
-            _worldSize = new Point(background.Width, background.Height);
-
-            // to let the new world size take effect, we need to set the FullScreen property again
+            // to re-scale the game world to the screen size, we need to set the FullScreen property again
+            _worldSize = GameWorld.Size;
             FullScreen = false;
         }
-        
+        public static JewelJamGameWorld GameWorld => _gameWorld as JewelJamGameWorld;
     }
 }
