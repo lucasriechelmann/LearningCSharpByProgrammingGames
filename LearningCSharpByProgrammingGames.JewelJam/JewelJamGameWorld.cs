@@ -1,6 +1,7 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
 using LearningCSharpByProgrammingGames.JewelJam.Objects;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace LearningCSharpByProgrammingGames.JewelJam;
 
@@ -19,14 +20,39 @@ public class JewelJamGameWorld : GameObjectList
     /// </summary>
     const int CellSize = 85;
 
-    // The size of the game world, in game units.
+    /// <summary>
+    /// The size of the game world, in game units.
+    /// </summary>
     public Point Size { get; private set; }
 
-    // The player's current score.
+    /// <summary>
+    /// The player's current score.
+    /// </summary>
     public int Score { get; private set; }
-
-    public JewelJamGameWorld()
+    /// <summary>
+    /// A reference to the moving jewel cart.
+    /// </summary>
+    JewelCart _jewelCart;
+    // References to the different overlays and buttons.
+    SpriteGameObject _titleScreen, _gameOverScreen, _helpScreen;
+    /// <summary>
+    /// An enum describing the possible game states that the game can be in.
+    /// </summary>
+    enum GameState
     {
+        TitleScreen,
+        Playing,
+        HelpScreen,
+        GameOver
+    }
+
+    // The game state that the game is currently in.
+    GameState _currentState;
+    SpriteGameObject _helpButton;
+    JewelJamGame _game;
+    public JewelJamGameWorld(JewelJamGame game)
+    {
+        _game = game;
         // add the background
         SpriteGameObject background = new SpriteGameObject("spr_background");
         Size = new Point(background.Width, background.Height);
@@ -54,13 +80,77 @@ public class JewelJamGameWorld : GameObjectList
         scoreObject.LocalPosition = new Vector2(270, 30);
         AddChild(scoreObject);
 
-        // reset some game parameters
-        Reset();
-    }
+        // add the jewel cart
+        _jewelCart = new JewelCart(new Vector2(410, 230));
+        AddChild(_jewelCart);
 
+        //add help button
+        _helpButton = new("spr_button_help");
+        _helpButton.LocalPosition = new Vector2(1270, 20);
+        AddChild(_helpButton);
+
+        _titleScreen = AddOverlay("spr_title");
+        _gameOverScreen = AddOverlay("spr_gameover");
+        _helpScreen = AddOverlay("spr_frame_help");
+
+        GoToState(GameState.TitleScreen);
+    }
+    public override void HandleInput(InputHelper inputHelper)
+    {
+        if (_currentState == GameState.Playing)
+        {
+            base.HandleInput(inputHelper);
+
+            if (inputHelper.MouseLeftButtonPressed() &&
+                _helpButton.BoundingBox.Contains(_game.ScreenToWorld(inputHelper.MousePosition)))
+            {
+                GoToState(GameState.HelpScreen);
+            }            
+        }            
+        else if(_currentState == GameState.TitleScreen || _currentState == GameState.GameOver)
+        {
+            if (inputHelper.KeyPressed(Keys.Space))
+            {
+                Reset();
+                GoToState(GameState.Playing);
+            }
+        }
+        else if(_currentState == GameState.HelpScreen)
+        {
+            if (inputHelper.KeyPressed(Keys.Space))
+                GoToState(GameState.Playing);
+        }
+    }
+    public override void Update(GameTime gameTime)
+    {
+        if (_currentState == GameState.Playing)
+        {
+            base.Update(gameTime);
+
+            if(_jewelCart.GlobalPosition.X > Size.X - 230)
+                GoToState(GameState.GameOver);
+        }
+        
+    }
+    SpriteGameObject AddOverlay(string spriteName)
+    {
+        SpriteGameObject overlay = new(spriteName);
+        overlay.SetOriginToCenter();
+        overlay.LocalPosition = new Vector2(Size.X / 2, Size.Y / 2);
+        AddChild(overlay);
+        return overlay;
+    }
+    void GoToState(GameState newState)
+    {
+        _currentState = newState;
+        _titleScreen.Visible = _currentState == GameState.TitleScreen;
+        _gameOverScreen.Visible = _currentState == GameState.GameOver;
+        _helpScreen.Visible = _currentState == GameState.HelpScreen;     
+    }
     public void AddScore(int points)
     {
         Score += points;
+        _jewelCart.PushBack();
     }
 
     public override void Reset()

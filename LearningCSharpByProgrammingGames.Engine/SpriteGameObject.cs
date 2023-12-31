@@ -43,4 +43,8 @@ public class SpriteGameObject : GameObject
             return spriteBounds;
         }
     }
+    public void SetOriginToCenter()
+    {
+        _origin = new Vector2(Width / 2, Height / 2);
+    }
 }

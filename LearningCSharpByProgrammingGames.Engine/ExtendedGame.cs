@@ -175,7 +175,7 @@ public class ExtendedGame : Game
     /// </summary>
     /// <param name="screenPosition">A position in screen coordinates.</param>
     /// <returns>The corresponding position in world coordinates.</returns>
-    Vector2 ScreenToWorld(Vector2 screenPosition)
+    public Vector2 ScreenToWorld(Vector2 screenPosition)
     {
         Vector2 viewportTopLeft = new(
             GraphicsDevice.Viewport.X,
