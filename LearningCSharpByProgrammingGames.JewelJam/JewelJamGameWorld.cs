@@ -50,6 +50,7 @@ public class JewelJamGameWorld : GameObjectList
     GameState _currentState;
     SpriteGameObject _helpButton;
     JewelJamGame _game;
+    VisibilityTimer _timerDouble, _timerTriple;
     public JewelJamGameWorld(JewelJamGame game)
     {
         _game = game;
@@ -89,6 +90,10 @@ public class JewelJamGameWorld : GameObjectList
         _helpButton.LocalPosition = new Vector2(1270, 20);
         AddChild(_helpButton);
 
+        // add the combo images and timers
+        _timerDouble = AddcomboImageWithTime("spr_double");
+        _timerTriple = AddcomboImageWithTime("spr_triple");
+
         _titleScreen = AddOverlay("spr_title");
         _gameOverScreen = AddOverlay("spr_gameover");
         _helpScreen = AddOverlay("spr_frame_help");
@@ -121,6 +126,8 @@ public class JewelJamGameWorld : GameObjectList
                 GoToState(GameState.Playing);
         }
     }
+    public void DoubleComboScored() => _timerDouble.StartVisible(3);
+    public void TripleComboScored() => _timerTriple.StartVisible(3);
     public override void Update(GameTime gameTime)
     {
         if (_currentState == GameState.Playing)
@@ -139,6 +146,19 @@ public class JewelJamGameWorld : GameObjectList
         overlay.LocalPosition = new Vector2(Size.X / 2, Size.Y / 2);
         AddChild(overlay);
         return overlay;
+    }
+    VisibilityTimer AddcomboImageWithTime(string spriteName)
+    {
+        // create and add the image
+        SpriteGameObject image = new(spriteName);
+        image.Visible = false;
+        image.LocalPosition = new Vector2(800, 400);
+        AddChild(image);
+        // create and add the timer, with that image as its target
+        VisibilityTimer timer = new(image);
+        AddChild(timer);
+
+        return timer;
     }
     void GoToState(GameState newState)
     {
