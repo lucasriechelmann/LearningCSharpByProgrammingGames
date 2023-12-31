@@ -26,7 +26,10 @@ public class JewelGrid : GameObject
     {
         // initialize the grid
         _grid = new Jewel[Width, Height];
-
+        ResetGridValues();
+    }
+    void ResetGridValues()
+    {
         // fill the grid with random jewels
         for (int x = 0; x < Width; x++)
             for (int y = 0; y < Height; y++)
@@ -63,7 +66,16 @@ public class JewelGrid : GameObject
     public override void HandleInput(InputHelper inputHelper)
     {        
         if(inputHelper.KeyPressed(Keys.F1))
+        {
             MoveRowsDown();
+            JewelJamGame.GameWorld.AddScore(-1);
+        }
+
+        if(inputHelper.KeyPressed(Keys.F2))
+        {
+            ResetGridValues();
+            JewelJamGame.GameWorld.AddScore(-10);
+        }
 
         if(!inputHelper.KeyPressed(Keys.Space))
             return;

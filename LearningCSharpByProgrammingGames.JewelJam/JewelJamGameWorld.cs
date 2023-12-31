@@ -172,7 +172,10 @@ public class JewelJamGameWorld : GameObjectList
     public void AddScore(int points)
     {
         Score += points;
-        _jewelCart.PushBack();
+
+        if (points > 0)
+            _jewelCart.PushBack();
+
     }
 
     public override void Reset()
