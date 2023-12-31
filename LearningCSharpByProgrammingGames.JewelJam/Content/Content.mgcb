@@ -20,6 +20,42 @@
 /processorParam:TextureFormat=Compressed
 /build:JewelJamFont.spritefont
 
+#begin snd_double.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:snd_double.wav
+
+#begin snd_error.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:snd_error.wav
+
+#begin snd_gameover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:snd_gameover.wav
+
+#begin snd_music.wma
+/importer:WmaImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:snd_music.wma
+
+#begin snd_single.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:snd_single.wav
+
+#begin snd_triple.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:snd_triple.wav
+
 #begin spr_background.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

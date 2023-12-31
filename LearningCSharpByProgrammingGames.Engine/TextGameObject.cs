@@ -12,7 +12,7 @@ public class TextGameObject : GameObject
     public Alignment _alignment { get; set; }
     public TextGameObject(string fontName, Color color, Alignment alignment = Alignment.Left)
     {
-        _font = ExtendedGame.ContentManager.Load<SpriteFont>(fontName);        
+        _font = ExtendedGame.AssetManager.LoadFont(fontName);        
         _color = color;
         _alignment = alignment;
 

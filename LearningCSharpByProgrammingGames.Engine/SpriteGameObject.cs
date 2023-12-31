@@ -9,7 +9,7 @@ public class SpriteGameObject : GameObject
     protected Vector2 _origin;
     public SpriteGameObject(string spriteName)
     {
-        _sprite = ExtendedGame.ContentManager.Load<Texture2D>(spriteName);
+        _sprite = ExtendedGame.AssetManager.LoadSprite(spriteName);            
         _origin = Vector2.Zero;
     }
     public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

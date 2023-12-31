@@ -98,6 +98,8 @@ public class JewelJamGameWorld : GameObjectList
         _gameOverScreen = AddOverlay("spr_gameover");
         _helpScreen = AddOverlay("spr_frame_help");
 
+        ExtendedGame.AssetManager.PlaySong("snd_music", true);
+
         GoToState(GameState.TitleScreen);
     }
     public override void HandleInput(InputHelper inputHelper)

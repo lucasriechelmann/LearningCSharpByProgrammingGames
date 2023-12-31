@@ -78,17 +78,7 @@ public class JewelGrid : GameObject
             {
                 combo++;
                 JewelJamGame.GameWorld.AddScore(extraScore);
-                extraScore *= 2;
-
-                switch (combo)
-                {
-                    case 2:
-                        JewelJamGame.GameWorld.DoubleComboScored();
-                        break;
-                    case 3:
-                        JewelJamGame.GameWorld.TripleComboScored();
-                        break;
-                }
+                extraScore *= 2;                
 
                 // remove the three jewels, let the jewels above that fall down, and fill the gaps that remain
                 RemoveJewel(middleColumn, y, -1);
@@ -98,6 +88,24 @@ public class JewelGrid : GameObject
                 y += 2;
                 
             }
+        }
+
+        switch (combo)
+        {
+            case 1:
+                ExtendedGame.AssetManager.PlaySoundEffect("snd_single");
+                break;
+            case 2:
+                JewelJamGame.GameWorld.DoubleComboScored();
+                ExtendedGame.AssetManager.PlaySoundEffect("snd_double");
+                break;
+            case 3:
+                JewelJamGame.GameWorld.TripleComboScored();
+                ExtendedGame.AssetManager.PlaySoundEffect("snd_triple");
+                break;
+            default:
+                ExtendedGame.AssetManager.PlaySoundEffect("snd_error");
+                break;
         }
     }    
     /// <summary>

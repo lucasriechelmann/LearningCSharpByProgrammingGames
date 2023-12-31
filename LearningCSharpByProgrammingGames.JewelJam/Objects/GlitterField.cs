@@ -31,7 +31,7 @@ public class GlitterField : GameObject
     public GlitterField(Texture2D target, int numberOfGlitters, Rectangle targetRectangle)
     {
         // load the glitter sprite
-        _glitter = ExtendedGame.ContentManager.Load<Texture2D>("spr_glitter");
+        _glitter = ExtendedGame.AssetManager.LoadSprite("spr_glitter");
 
         // initialize some member variables
         this._target = target;

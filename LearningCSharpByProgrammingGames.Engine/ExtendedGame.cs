@@ -33,7 +33,7 @@ public class ExtendedGame : Game
     /// <summary>
     /// An object for loading assets throughout the game.
     /// </summary>
-    public static ContentManager ContentManager { get; private set; }
+    public static AssetManager AssetManager { get; private set; }
     /// <summary>
     /// The game world, represented by a list of game objects.
     /// </summary>
@@ -50,13 +50,14 @@ public class ExtendedGame : Game
         _worldSize = new Point(1024, 768);
         _windowSize = new Point(1024, 768);
         
+        
     }
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         // store a static reference to the ContentManager
-        ContentManager = Content;
-
+        AssetManager = new(Content);        
+        
         // create an empty game world
         _gameWorld = new();
 
