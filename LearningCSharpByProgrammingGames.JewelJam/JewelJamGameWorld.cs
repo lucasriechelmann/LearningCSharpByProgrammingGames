@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LearningCSharpByProgrammingGames.JewelJam;
 
-public class JewelJamGameWorld : GameObjectList
+public class JewelJamGameWorld : GameState
 {
     /// <summary>
     /// The width of the grid: the number of cells in the horizontal direction.
@@ -102,6 +102,7 @@ public class JewelJamGameWorld : GameObjectList
 
         GoToState(GameState.TitleScreen);
     }
+    public void AddChild(GameObject gameObject) => _gameObjects.AddChild(gameObject);
     public override void HandleInput(InputHelper inputHelper)
     {
         if (_currentState == GameState.Playing)

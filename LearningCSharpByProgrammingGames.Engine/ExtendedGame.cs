@@ -37,7 +37,7 @@ public class ExtendedGame : Game
     /// <summary>
     /// The game world, represented by a list of game objects.
     /// </summary>
-    protected static GameObjectList _gameWorld;
+    public static GameStateManager GameStateManager;
     public ExtendedGame()
     {
         Content.RootDirectory = "Content";
@@ -59,7 +59,7 @@ public class ExtendedGame : Game
         AssetManager = new(Content);        
         
         // create an empty game world
-        _gameWorld = new();
+        GameStateManager = new();
 
         // by default, we're not running in full-screen mode
         FullScreen = false;
@@ -69,7 +69,7 @@ public class ExtendedGame : Game
         HandleInput();
 
         // let all game objects update themselves
-        _gameWorld.Update(gameTime);        
+        GameStateManager.Update(gameTime);        
     }
     protected virtual void HandleInput()
     {
@@ -84,7 +84,7 @@ public class ExtendedGame : Game
             FullScreen = !FullScreen;
 
         // let all game objects do their own input handling
-        _gameWorld.HandleInput(_inputHelper);
+        GameStateManager.HandleInput(_inputHelper);
     }
     protected override void Draw(GameTime gameTime)
     {
@@ -94,7 +94,7 @@ public class ExtendedGame : Game
         _spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
 
         // let all game objects draw themselves
-        _gameWorld.Draw(gameTime, _spriteBatch);
+        GameStateManager.Draw(gameTime, _spriteBatch);
 
         _spriteBatch.End();
     }

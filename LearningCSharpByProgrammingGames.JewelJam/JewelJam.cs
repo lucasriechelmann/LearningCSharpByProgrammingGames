@@ -19,12 +19,13 @@ namespace LearningCSharpByProgrammingGames.JewelJam
             base.LoadContent();
 
             // initialize the game world
-            _gameWorld = new JewelJamGameWorld(this);
+            GameStateManager.AddGameState("Jewel Jam", new JewelJamGameWorld(this));
+            GameStateManager.SwitchTo("Jewel Jam");
 
             // to re-scale the game world to the screen size, we need to set the FullScreen property again
             _worldSize = GameWorld.Size;
             FullScreen = false;
         }
-        public static JewelJamGameWorld GameWorld => _gameWorld as JewelJamGameWorld;
+        public static JewelJamGameWorld GameWorld => GameStateManager.GetGameState("Jewel Jam") as JewelJamGameWorld;
     }
 }
