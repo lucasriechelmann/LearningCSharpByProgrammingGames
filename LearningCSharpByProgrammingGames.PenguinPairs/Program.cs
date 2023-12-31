@@ -1,3 +1,4 @@
-﻿
-using var game = new LearningCSharpByProgrammingGames.PenguinPairs.Game1();
+﻿using LearningCSharpByProgrammingGames.PenguinPairs;
+
+using var game = new PenguinPairsGame();
 game.Run();

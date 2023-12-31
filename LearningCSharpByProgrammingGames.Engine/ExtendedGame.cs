@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace LearningCSharpByProgrammingGames.Engine;
 
-public class ExtendedGame : Game
+public abstract class ExtendedGame : Game
 {
     //Standard MonoGame objects for graphics and sprites
     protected GraphicsDeviceManager _graphics;
@@ -35,14 +35,20 @@ public class ExtendedGame : Game
     /// </summary>
     public static AssetManager AssetManager { get; private set; }
     /// <summary>
-    /// The game world, represented by a list of game objects.
+    /// The object that manages all game states, one of which is the active state.
     /// </summary>
-    public static GameStateManager GameStateManager;
+    public static GameStateManager GameStateManager { get; private set; }
+    public static string ContentRootDirectory => "Content";
+    /// <summary>
+    /// Creates a new ExtendedGame object.
+    /// </summary>
     public ExtendedGame()
     {
-        Content.RootDirectory = "Content";
+        // MonoGame preparations
+        Content.RootDirectory = ContentRootDirectory;
         _graphics = new(this);
 
+        // create the input helper and random number generator
         _inputHelper = new();
         Random = new();
 
@@ -52,25 +58,35 @@ public class ExtendedGame : Game
         
         
     }
+    /// <summary>
+    /// Does the initialization tasks that involve assets, and then prepares the game world.
+    /// Override this method to do your own specific things when your game starts.
+    /// </summary>
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         // store a static reference to the ContentManager
-        AssetManager = new(Content);        
-        
-        // create an empty game world
+        AssetManager = new(Content);
+
+        // prepare an empty game state manager
         GameStateManager = new();
 
         // by default, we're not running in full-screen mode
         FullScreen = false;
     }
+    /// <summary>
+    /// Updates all objects in the game world, by first calling HandleInput and then Update.
+    /// </summary>
+    /// <param name="gameTime">An object containing information about the time that has passed.</param>
     protected override void Update(GameTime gameTime)
     {
         HandleInput();
-
-        // let all game objects update themselves
+        // let the game state manager update the game world
         GameStateManager.Update(gameTime);        
     }
+    /// <summary>
+    /// Performs basic input handling and then calls HandleInput for the entire game world.
+    /// </summary>
     protected virtual void HandleInput()
     {
         _inputHelper.Update();
@@ -83,15 +99,19 @@ public class ExtendedGame : Game
         if (_inputHelper.KeyPressed(Keys.F5))
             FullScreen = !FullScreen;
 
-        // let all game objects do their own input handling
+        // let the game state manager handle input
         GameStateManager.HandleInput(_inputHelper);
     }
+    /// <summary>
+    /// Draws the game world.
+    /// </summary>
+    /// <param name="gameTime">An object containing information about the time that has passed.</param>
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         // start drawing sprites, applying the scaling matrix
-        _spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
+        _spriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, _spriteScale);
 
         // let all game objects draw themselves
         GameStateManager.Draw(gameTime, _spriteBatch);

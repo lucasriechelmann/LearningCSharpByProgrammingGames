@@ -6,7 +6,7 @@ namespace LearningCSharpByProgrammingGames.Engine;
 /// <summary>
 /// A class that manages all objects belonging to a single game state.
 /// </summary>
-public class GameState
+public abstract class GameState
 {
     /// <summary>
     /// The game objects associated to this game state.
@@ -42,4 +42,5 @@ public class GameState
     /// Calls Reset for all objects in this GameState.
     /// </summary>
     public virtual void Reset() => _gameObjects.Reset();
+    public void AddChild(GameObject gameObject) => _gameObjects.AddChild(gameObject);
 }
