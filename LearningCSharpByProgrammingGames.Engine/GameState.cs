@@ -6,7 +6,7 @@ namespace LearningCSharpByProgrammingGames.Engine;
 /// <summary>
 /// A class that manages all objects belonging to a single game state.
 /// </summary>
-public abstract class GameState
+public abstract class GameState : IGameLoopObject
 {
     /// <summary>
     /// The game objects associated to this game state.

@@ -14,7 +14,7 @@ public class Jewel : SpriteGameObject
     /// <summary>
     /// Creates a new Jewel of a random type.
     /// </summary>
-    public Jewel() : base("spr_jewels")
+    public Jewel() : base("spr_jewels", 27, 1)
     {
         ColorType = ExtendedGame.Random.Next(3);
         ShapeType = ExtendedGame.Random.Next(3);
@@ -22,6 +22,7 @@ public class Jewel : SpriteGameObject
         // The sprite is a single sheet that contains all possible jewel sprites.
         // Calculate the part of that sprite that we want to draw.
         int index = ColorType * 9 + ShapeType * 3 + NumberType;
+        this.SheetIndex = index;
         _spriteRectangle = new(index * _sprite.Height, 0, _sprite.Height, _sprite.Height);
 
         TargetPosition = Vector2.Zero;
@@ -33,7 +34,7 @@ public class Jewel : SpriteGameObject
     public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
         //draw the correct sprite part at the jewel's position
-        spriteBatch.Draw(_sprite, GlobalPosition, _spriteRectangle, Color.White);
+        _sprite.Draw(spriteBatch, GlobalPosition, Origin);        
         _glitters.Draw(gameTime, spriteBatch);
     }
     public override void Update(GameTime gameTime)

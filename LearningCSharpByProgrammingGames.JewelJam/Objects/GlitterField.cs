@@ -13,7 +13,7 @@ public class GlitterField : GameObject
     Texture2D _glitter;
 
     // The target image on which the glitter effect should be applied
-    Texture2D _target;
+    SpriteSheet _target;
     // The rectangle within the target image that should receive glitters
     Rectangle _targetRectangle;
 
@@ -28,7 +28,7 @@ public class GlitterField : GameObject
     /// <param name="target">The sprite on which the glitters should be applied.</param>
     /// <param name="numberOfGlitters">The total number of glitters to apply.</param>
     /// <param name="targetRectangle">The part of the sprite that should receive glitters.</param>
-    public GlitterField(Texture2D target, int numberOfGlitters, Rectangle targetRectangle)
+    public GlitterField(SpriteSheet target, int numberOfGlitters, Rectangle targetRectangle)
     {
         // load the glitter sprite
         _glitter = ExtendedGame.AssetManager.LoadSprite("spr_glitter");
@@ -61,7 +61,7 @@ public class GlitterField : GameObject
             // get the pixel data at that position
             Rectangle rect = new Rectangle(randomPos, new Point(1, 1));
             Color[] retrievedColor = new Color[1];
-            _target.GetData(0, rect, retrievedColor, 0, 1);
+            _target.Texture.GetData(0, rect, retrievedColor, 0, 1);            
 
             // if the pixel is fully opaque, accept it as the answer
             if (retrievedColor[0].A == 255)

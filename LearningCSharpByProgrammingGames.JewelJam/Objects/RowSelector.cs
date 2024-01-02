@@ -12,7 +12,7 @@ public class RowSelector : SpriteGameObject
     {
         _grid = grid;
         _selectedRow = 0;
-        _origin = new(10,10);
+        Origin = new(10,10);
     }
     public override void HandleInput(InputHelper inputHelper)
     {

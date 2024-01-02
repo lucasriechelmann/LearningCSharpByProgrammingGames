@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LearningCSharpByProgrammingGames.Engine;
 
-public abstract class GameObject
+public abstract class GameObject : IGameLoopObject
 {
     public GameObject Parent { get; set; }
     public Vector2 LocalPosition { get; set; }
