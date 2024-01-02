@@ -11,7 +11,13 @@ public class InputHelper
     MouseState currentMouseState, previousMouseState;
     // the current and previous keyboard state
     KeyboardState currentKeyboardState, previousKeyboardState;
+    // A reference to the game
+    ExtendedGame _game;
 
+    public InputHelper(ExtendedGame game)
+    {
+        _game = game;
+    }
     /// <summary>
     /// Updates this InputHelper object for one frame of the game loop.
     /// This method retrievse the current the mouse and keyboard state, and stores the previous states as a backup.
@@ -25,12 +31,15 @@ public class InputHelper
     }
 
     /// <summary>
-    /// Gets the current position of the mouse, relative to the top-left corner of the screen.
+    /// Gets the current position of the mouse in screen coordinates.
     /// </summary>
-    public Vector2 MousePosition
-    {
-        get { return new Vector2(currentMouseState.X, currentMouseState.Y); }
-    }
+    public Vector2 MousePositionScreen =>
+        new Vector2(currentMouseState.X, currentMouseState.Y);
+
+    /// <summary>
+    /// Gets the current position of the mouse in world coordinates.
+    /// </summary>
+    public Vector2 MousePositionWorld => _game.ScreenToWorld(MousePositionScreen);
 
     /// <summary>
     /// Checks and returns whether the player has started pressing the left mouse button in the last frame of the game loop.
@@ -40,7 +49,14 @@ public class InputHelper
     {
         return currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released;
     }
-
+    /// <summary>
+    /// Checks and returns whether the left mouse button is currently being held down.
+    /// </summary>
+    /// <returns>true if the left mouse button is currently being held down; false otherwise.</returns>
+    public bool MouseLeftButtonDown()
+    {
+        return currentMouseState.LeftButton == ButtonState.Pressed;
+    }
     /// <summary>
     /// Checks and returns whether the player has started pressing a certain keyboard key in the last frame of the game loop.
     /// </summary>

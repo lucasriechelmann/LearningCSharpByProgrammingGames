@@ -110,7 +110,7 @@ public class JewelJamGameWorld : GameState
             base.HandleInput(inputHelper);
 
             if (inputHelper.MouseLeftButtonPressed() &&
-                _helpButton.BoundingBox.Contains(_game.ScreenToWorld(inputHelper.MousePosition)))
+                _helpButton.BoundingBox.Contains(inputHelper.MousePositionWorld))
             {
                 GoToState(GameState.HelpScreen);
             }            

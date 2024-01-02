@@ -49,7 +49,7 @@ public abstract class ExtendedGame : Game
         _graphics = new(this);
 
         // create the input helper and random number generator
-        _inputHelper = new();
+        _inputHelper = new(this);
         Random = new();
 
         // default window and world size

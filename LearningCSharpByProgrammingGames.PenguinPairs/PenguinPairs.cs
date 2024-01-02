@@ -11,9 +11,14 @@ public class PenguinPairsGame : ExtendedGame
     public const string StateName_Options = "options";
     public const string StateName_LevelSelect = "levelselect";
     public const string StateName_Playing = "playing";
+    /// <summary>
+    /// Whether or not hints are enabled in the game.
+    /// </summary>
+    public static bool HintsEnabled { get; set; }
     public PenguinPairsGame()
     {        
         IsMouseVisible = true;
+        HintsEnabled = true;
     }
 
     protected override void Initialize()
