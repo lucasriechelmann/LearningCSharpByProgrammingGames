@@ -21,6 +21,7 @@ public class Level : GameObjectList
 
     SpriteGameObject hintArrow;
     MovableAnimalSelector selector;
+
     public Level(int levelIndex, string filename)
     {
         LevelIndex = levelIndex;
@@ -48,7 +49,7 @@ public class Level : GameObjectList
         int hintY = int.Parse(hint[1]);
         int hintDirection = StringToDirection(hint[2]);
         hintArrow = new SpriteGameObject("Sprites/LevelObjects/spr_arrow_hint@4", hintDirection);
-        hintArrow.LocalPosition = GetCellPosition(hintX, hintY);        
+        hintArrow.LocalPosition = GetCellPosition(hintX, hintY);
 
         // read the rows of the grid; keep track of the longest row
         int gridWidth = 0;
@@ -175,18 +176,14 @@ public class Level : GameObjectList
     Tile.Type CharToTileType(char symbol)
     {
         // the standard cases: tiles without an animal on them
-
-        switch(symbol)
-        {
-            case ' ':
-                return Tile.Type.Empty;
-            case '.':
-                return Tile.Type.Normal;
-            case '#':
-                return Tile.Type.Wall;
-            case '_':
-                return Tile.Type.Hole;
-        }
+        if (symbol == ' ')
+            return Tile.Type.Empty;
+        if (symbol == '.')
+            return Tile.Type.Normal;
+        if (symbol == '#')
+            return Tile.Type.Wall;
+        if (symbol == '_')
+            return Tile.Type.Hole;
 
         // every other symbol can be either a hole tile or a normal tile
         if (GetAnimalInHoleIndex(symbol) >= 0)
@@ -240,7 +237,10 @@ public class Level : GameObjectList
     /// <param name="symbol">The character to check.</param>
     /// <returns>An index (between 0 and 7) representing the type of penguin or seal, 
     /// or -1 if the given character does not represent such an animal.</returns>
-    int GetAnimalIndex(char symbol) => MovableAnimalLetters.IndexOf(symbol);
+    int GetAnimalIndex(char symbol)
+    {
+        return MovableAnimalLetters.IndexOf(symbol);
+    }
 
     /// <summary>
     /// Tries to convert a character to an index for a "holed" penguin or seal.
@@ -248,22 +248,22 @@ public class Level : GameObjectList
     /// <param name="symbol">The character to check.</param>
     /// <returns>An index (between 0 and 7) representing the type of penguin or seal, 
     /// or -1 if the given character does not represent such an animal.</returns>
-    int GetAnimalInHoleIndex(char symbol) => MovableAnimalLetters.ToUpper().IndexOf(symbol);
+    int GetAnimalInHoleIndex(char symbol)
+    {
+        return MovableAnimalLetters.ToUpper().IndexOf(symbol);
+    }
 
     int StringToDirection(string directionText)
     {
-        switch (directionText)
-        {
-            case "right":
-                return 0;
-            case "up":
-                return 1;
-            case "left":
-                return 2;
-            default:
-                return 3;
-        }        
+        if (directionText == "right")
+            return 0;
+        if (directionText == "up")
+            return 1;
+        if (directionText == "left")
+            return 2;
+        return 3;
     }
+
     /// <summary>
     /// Marks the given animal as the selected one.
     /// </summary>
@@ -272,6 +272,7 @@ public class Level : GameObjectList
     {
         selector.SelectedAnimal = animal;
     }
+
     public Vector2 GetCellPosition(int x, int y)
     {
         return new Vector2(x * TileWidth, y * TileHeight);

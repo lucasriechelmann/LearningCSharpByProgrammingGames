@@ -8,58 +8,64 @@ namespace LearningCSharpByProgrammingGames.PenguinPairs.GameStates;
 
 public class PlayingState : GameState
 {
-    Button _hintButton, _retryButton, _quitButton;
-    Level _level;
+    Level level;
+
+    Button hintButton, retryButton, quitButton;
+
     public PlayingState()
     {
-        AddChild(new SpriteGameObject("Sprites/spr_background_level"));
+        // add a background
+        SpriteGameObject background = new SpriteGameObject("Sprites/spr_background_level");
+        _gameObjects.AddChild(background);
 
         // add a "hint" button
-        _hintButton = new Button("Sprites/UI/spr_button_hint");
-        _hintButton.LocalPosition = new Vector2(916, 20);
-        AddChild(_hintButton);
+        hintButton = new Button("Sprites/UI/spr_button_hint");
+        hintButton.LocalPosition = new Vector2(916, 20);
+        _gameObjects.AddChild(hintButton);
 
         // add a "retry" button, initially invisible
-        _retryButton = new Button("Sprites/UI/spr_button_retry");
-        _retryButton.LocalPosition = new Vector2(916, 20);
-        _retryButton.Visible = false;
-        AddChild(_retryButton);
+        retryButton = new Button("Sprites/UI/spr_button_retry");
+        retryButton.LocalPosition = new Vector2(916, 20);
+        retryButton.Visible = false;
+        _gameObjects.AddChild(retryButton);
 
         // add a "quit" button
-        _quitButton = new Button("Sprites/UI/spr_button_quit");
-        _quitButton.LocalPosition = new Vector2(1058, 20);
-        AddChild(_quitButton);
-    }    
+        quitButton = new Button("Sprites/UI/spr_button_quit");
+        quitButton.LocalPosition = new Vector2(1058, 20);
+        _gameObjects.AddChild(quitButton);
+    }
+
     public override void HandleInput(InputHelper inputHelper)
     {
         base.HandleInput(inputHelper);
 
-        if (_quitButton.Pressed)
-        {
+        // if the "quit" button is pressed, return to the level selection screen
+        if (quitButton.Pressed)
             ExtendedGame.GameStateManager.SwitchTo(PenguinPairsGame.StateName_LevelSelect);
-        }
 
-        if(_level is not null)
-            _level.HandleInput(inputHelper);
+        if (level != null)
+            level.HandleInput(inputHelper);
     }
+
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
-        if(_level is not null)
-            _level.Update(gameTime);
+        if (level != null)
+            level.Update(gameTime);
     }
+
     public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
         base.Draw(gameTime, spriteBatch);
-
-        if(_level is not null)
-            _level.Draw(gameTime, spriteBatch);
+        if (level != null)
+            level.Draw(gameTime, spriteBatch);
     }
+
     public void LoadLevel(int levelIndex)
     {
-        _level = new Level(levelIndex, $"Content/Levels/level{levelIndex}.txt");
+        level = new Level(levelIndex, "Content/Levels/level" + levelIndex + ".txt");
+
         // update the visibilty of the hint button
-        _hintButton.Visible = PenguinPairsGame.HintsEnabled;
+        hintButton.Visible = PenguinPairsGame.HintsEnabled;
     }
 }
