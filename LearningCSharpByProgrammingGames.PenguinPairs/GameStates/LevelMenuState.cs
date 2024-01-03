@@ -20,7 +20,7 @@ public class LevelMenuState : GameState
 
         // Add a level button for each level.
         // For now, let's pretend that there are 12 levels, without actually loading them yet.
-        int numberOfLevels = 12;
+        int numberOfLevels = PenguinPairsGame.NumberOfLevels;
         _levelButtons = new LevelButton[numberOfLevels];
 
         Vector2 gridOffset = new Vector2(155, 230);
@@ -31,7 +31,7 @@ public class LevelMenuState : GameState
         for (int i = 0; i < numberOfLevels; i++)
         {
             // create the button
-            LevelButton levelButton = new LevelButton(i + 1, LevelStatus.Solved);
+            LevelButton levelButton = new LevelButton(i + 1, PenguinPairsGame.GetLevelStatus(i+1));
 
             // give it the correct position
             int row = i / buttonsPerRow;
@@ -65,7 +65,10 @@ public class LevelMenuState : GameState
                 // go to the playing state
                 ExtendedGame.GameStateManager.SwitchTo(PenguinPairsGame.StateName_Playing);
 
-                // TODO: load the level
+                PlayingState playingState = (PlayingState)ExtendedGame
+                    .GameStateManager
+                    .GetGameState(PenguinPairsGame.StateName_Playing);
+                playingState.LoadLevel(button.LevelIndex);
                 return;
             }
         }

@@ -1,13 +1,15 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
 using LearningCSharpByProgrammingGames.Engine.UI;
+using LearningCSharpByProgrammingGames.PenguinPairs.LevelObjects;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LearningCSharpByProgrammingGames.PenguinPairs.GameStates;
 
 public class PlayingState : GameState
 {
     Button _hintButton, _retryButton, _quitButton;
+    Level _level;
     public PlayingState()
     {
         AddChild(new SpriteGameObject("Sprites/spr_background_level"));
@@ -27,7 +29,7 @@ public class PlayingState : GameState
         _quitButton = new Button("Sprites/UI/spr_button_quit");
         _quitButton.LocalPosition = new Vector2(1058, 20);
         AddChild(_quitButton);
-    }
+    }    
     public override void HandleInput(InputHelper inputHelper)
     {
         base.HandleInput(inputHelper);
@@ -36,5 +38,28 @@ public class PlayingState : GameState
         {
             ExtendedGame.GameStateManager.SwitchTo(PenguinPairsGame.StateName_LevelSelect);
         }
+
+        if(_level is not null)
+            _level.HandleInput(inputHelper);
+    }
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        if(_level is not null)
+            _level.Update(gameTime);
+    }
+    public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+    {
+        base.Draw(gameTime, spriteBatch);
+
+        if(_level is not null)
+            _level.Draw(gameTime, spriteBatch);
+    }
+    public void LoadLevel(int levelIndex)
+    {
+        _level = new Level(levelIndex, $"Content/Levels/level{levelIndex}.txt");
+        // update the visibilty of the hint button
+        _hintButton.Visible = PenguinPairsGame.HintsEnabled;
     }
 }

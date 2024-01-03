@@ -27,9 +27,9 @@ public class SpriteGameObject : GameObject
     /// Creates a new SpriteGameObject with a given sprite name.
     /// </summary>
     /// <param name="spriteName">The name of the sprite to load.</param>
-    public SpriteGameObject(string spriteName)
+    public SpriteGameObject(string spriteName, int sheetIndex = 0)
     {
-        _sprite = new(spriteName);            
+        _sprite = new(spriteName, sheetIndex);            
         Origin = Vector2.Zero;
     }
     public SpriteGameObject(string spriteName, int sheeColumns, int sheetRows, int sheetIndex = 0)

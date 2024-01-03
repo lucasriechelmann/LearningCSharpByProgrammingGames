@@ -34,6 +34,45 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/ScoreFont.spritefont
 
+#begin Levels/level1.txt
+/copy:Levels/level1.txt
+
+#begin Levels/level10.txt
+/copy:Levels/level10.txt
+
+#begin Levels/level11.txt
+/copy:Levels/level11.txt
+
+#begin Levels/level12.txt
+/copy:Levels/level12.txt
+
+#begin Levels/level2.txt
+/copy:Levels/level2.txt
+
+#begin Levels/level3.txt
+/copy:Levels/level3.txt
+
+#begin Levels/level4.txt
+/copy:Levels/level4.txt
+
+#begin Levels/level5.txt
+/copy:Levels/level5.txt
+
+#begin Levels/level6.txt
+/copy:Levels/level6.txt
+
+#begin Levels/level7.txt
+/copy:Levels/level7.txt
+
+#begin Levels/level8.txt
+/copy:Levels/level8.txt
+
+#begin Levels/level9.txt
+/copy:Levels/level9.txt
+
+#begin Levels/levels_status.txt
+/copy:Levels/levels_status.txt
+
 #begin Sounds/snd_eat.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
