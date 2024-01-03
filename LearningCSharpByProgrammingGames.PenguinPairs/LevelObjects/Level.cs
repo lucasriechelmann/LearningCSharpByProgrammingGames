@@ -19,6 +19,9 @@ public class Level : GameObjectList
     Tile[,] tiles;
     Animal[,] animalsOnTiles;
 
+    int GridWidth { get { return tiles.GetLength(0); } }
+    int GridHeight { get { return tiles.GetLength(1); } }
+
     SpriteGameObject hintArrow;
     MovableAnimalSelector selector;
 
@@ -205,29 +208,17 @@ public class Level : GameObjectList
 
         // a shark?
         if (symbol == '@')
-            result = new Shark(this);
+            result = new Shark(this, new Point(x, y));
 
-        // a penguin or seal that is not in a hole?
+        // a penguin or seal, possibly inside a hole?
         if (result == null)
         {
             int animalIndex = GetAnimalIndex(symbol);
-            if (animalIndex >= 0)
-                result = new MovableAnimal(this, animalIndex, false);
-        }
+            if (animalIndex < 0)
+                animalIndex = GetAnimalInHoleIndex(symbol);
 
-        // a penguin or seal that *is* in a hole?
-        if (result == null)
-        {
-            int animalIndex = GetAnimalInHoleIndex(symbol);
             if (animalIndex >= 0)
-                result = new MovableAnimal(this, animalIndex, true);
-        }
-
-        // if we've loaded an animal now, add it to the grid
-        if (result != null)
-        {
-            result.LocalPosition = GetCellPosition(x, y);
-            animalsOnTiles[x, y] = result;
+                result = new MovableAnimal(this, new Point(x, y), animalIndex);
         }
     }
 
@@ -273,8 +264,39 @@ public class Level : GameObjectList
         selector.SelectedAnimal = animal;
     }
 
+    public void AddAnimalToGrid(Animal animal, Point gridPosition)
+    {
+        animalsOnTiles[gridPosition.X, gridPosition.Y] = animal;
+    }
+
+    public void RemoveAnimalFromGrid(Point gridPosition)
+    {
+        animalsOnTiles[gridPosition.X, gridPosition.Y] = null;
+    }
+
+    bool IsPositionInGrid(Point gridPosition)
+    {
+        return gridPosition.X >= 0 && gridPosition.X < GridWidth
+            && gridPosition.Y >= 0 && gridPosition.Y < GridHeight;
+    }
+
+    public Tile.Type GetTileType(Point gridPosition)
+    {
+        if (!IsPositionInGrid(gridPosition))
+            return Tile.Type.Empty;
+        return tiles[gridPosition.X, gridPosition.Y].TileType;
+    }
+
+    public Animal GetAnimal(Point gridPosition)
+    {
+        if (!IsPositionInGrid(gridPosition))
+            return null;
+        return animalsOnTiles[gridPosition.X, gridPosition.Y];
+    }
+
     public Vector2 GetCellPosition(int x, int y)
     {
         return new Vector2(x * TileWidth, y * TileHeight);
     }
+
 }
