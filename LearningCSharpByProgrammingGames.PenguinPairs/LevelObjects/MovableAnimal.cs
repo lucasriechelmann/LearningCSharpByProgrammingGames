@@ -10,9 +10,12 @@ public class MovableAnimal : Animal
 
     bool isInHole;
 
+    Point startPosition;
+
     public MovableAnimal(Level level, Point gridPosition, int animalIndex)
         : base(level, gridPosition, GetSpriteName(false), animalIndex)
     {
+        startPosition = gridPosition;
         targetWorldPosition = LocalPosition;
     }
 
@@ -38,6 +41,16 @@ public class MovableAnimal : Animal
     }
 
     bool IsMoving { get { return LocalPosition != targetWorldPosition; } }
+
+    public override void Reset()
+    {
+        currentGridPosition = startPosition;
+        IsInHole = false;
+
+        base.Reset();
+
+        targetWorldPosition = LocalPosition;
+    }
 
     bool IsPairWith(MovableAnimal other)
     {
@@ -66,6 +79,7 @@ public class MovableAnimal : Animal
         if (tileType == Tile.Type.Empty)
         {
             Visible = false;
+            ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_eat");
             return;
         }
 
@@ -77,7 +91,13 @@ public class MovableAnimal : Animal
             Visible = false;
             otherAnimal.Visible = false;
 
-            // TODO: if the other animal matches, notify the game that we've made a pair
+            // if the other animal matches, notify the game that we've made a pair
+            if (otherAnimal is MovableAnimal)
+                level.PairFound(this, (MovableAnimal)otherAnimal);
+
+            // otherwise, the animal now gets eaten by a shark
+            else
+                ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_eat");
 
             return;
         }

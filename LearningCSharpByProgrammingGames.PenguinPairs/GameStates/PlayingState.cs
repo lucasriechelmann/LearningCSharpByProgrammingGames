@@ -11,6 +11,7 @@ public class PlayingState : GameState
     Level level;
 
     Button hintButton, retryButton, quitButton;
+    SpriteGameObject completedOverlay;
 
     public PlayingState()
     {
@@ -33,25 +34,50 @@ public class PlayingState : GameState
         quitButton = new Button("Sprites/UI/spr_button_quit");
         quitButton.LocalPosition = new Vector2(1058, 20);
         _gameObjects.AddChild(quitButton);
+
+        // add an overlay image
+        completedOverlay = new SpriteGameObject("Sprites/spr_level_finished");
+        _gameObjects.AddChild(completedOverlay);
     }
 
     public override void HandleInput(InputHelper inputHelper)
     {
         base.HandleInput(inputHelper);
 
-        // if the "quit" button is pressed, return to the level selection screen
-        if (quitButton.Pressed)
-            ExtendedGame.GameStateManager.SwitchTo(PenguinPairsGame.StateName_LevelSelect);
+        if (completedOverlay.Visible)
+        {
+            // go to the next level?
+            if (inputHelper.MouseLeftButtonPressed())
+                PenguinPairsGame.GoToNextLevel(level.LevelIndex);
+        }
+        else
+        {
+            // if the "quit" button is pressed, return to the level selection screen
+            if (quitButton.Pressed)
+                ExtendedGame.GameStateManager.SwitchTo(PenguinPairsGame.StateName_LevelSelect);
 
-        if (level != null)
-            level.HandleInput(inputHelper);
+            // if the "hint" button is pressed, show the hint arrow
+            if (hintButton.Pressed)
+                level.ShowHint();
+
+            // if the "retry" button is pressed, reset the level
+            if (retryButton.Pressed)
+                level.Reset();
+
+            if (level != null)
+                level.HandleInput(inputHelper);
+        }
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
         if (level != null)
+        {
             level.Update(gameTime);
+            hintButton.Visible = PenguinPairsGame.HintsEnabled && !level.FirstMoveMade;
+            retryButton.Visible = level.FirstMoveMade;
+        }
     }
 
     public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -64,8 +90,16 @@ public class PlayingState : GameState
     public void LoadLevel(int levelIndex)
     {
         level = new Level(levelIndex, "Content/Levels/level" + levelIndex + ".txt");
+        completedOverlay.Visible = false;
+    }
 
-        // update the visibilty of the hint button
-        hintButton.Visible = PenguinPairsGame.HintsEnabled;
+    public void LevelCompleted(int levelIndex)
+    {
+        completedOverlay.Visible = true;
+        level.Visible = false;
+
+        ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_won");
+
+        PenguinPairsGame.MarkLevelAsSolved(levelIndex);
     }
 }

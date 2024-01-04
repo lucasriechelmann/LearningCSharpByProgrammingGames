@@ -1,4 +1,5 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
+using LearningCSharpByProgrammingGames.PenguinPairs.GameStates;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,11 @@ public class Level : GameObjectList
 
     public int LevelIndex { get; private set; }
 
+    /// <summary>
+    /// Whether the player has already made their first move in this level.
+    /// </summary>
+    public bool FirstMoveMade { get; private set; }
+
     int targetNumberOfPairs;
 
     Tile[,] tiles;
@@ -23,12 +29,17 @@ public class Level : GameObjectList
     int GridHeight { get { return tiles.GetLength(1); } }
 
     SpriteGameObject hintArrow;
+    VisibilityTimer hintTimer;
     MovableAnimalSelector selector;
+    PairList pairList;
 
     public Level(int levelIndex, string filename)
     {
         LevelIndex = levelIndex;
         LoadLevelFromFile(filename);
+
+        // initially, the player has not made a move yet
+        FirstMoveMade = false;
     }
 
     void LoadLevelFromFile(string filename)
@@ -40,11 +51,11 @@ public class Level : GameObjectList
         string title = reader.ReadLine();
         string description = reader.ReadLine();
 
-        // add game objects to show that general level info
-        AddLevelInfoObjects(title, description);
-
         // read the number of required pairs
         targetNumberOfPairs = int.Parse(reader.ReadLine());
+
+        // add game objects to show that general level info
+        AddLevelInfoObjects(title, description);
 
         // read the hint, but don't add the game object yet (because it should be part of the grid)
         string[] hint = reader.ReadLine().Split(' ');
@@ -99,6 +110,11 @@ public class Level : GameObjectList
         descriptionText.Text = description;
         descriptionText.LocalPosition = new Vector2(600, 820);
         AddChild(descriptionText);
+
+        // - number of pairs
+        pairList = new PairList(targetNumberOfPairs);
+        pairList.LocalPosition = new Vector2(20, 20);
+        AddChild(pairList);
     }
 
     void AddPlayingField(List<string> gridRows, int gridWidth, int gridHeight)
@@ -147,6 +163,8 @@ public class Level : GameObjectList
         // add the hint arrow (so that it will be drawn on top), but make it invisible for now
         hintArrow.Visible = false;
         playingField.AddChild(hintArrow);
+        hintTimer = new VisibilityTimer(hintArrow);
+        playingField.AddChild(hintTimer);
 
         // add the animal selector
         selector = new MovableAnimalSelector();
@@ -256,12 +274,56 @@ public class Level : GameObjectList
     }
 
     /// <summary>
+    /// Resets the level to its initial state.
+    /// </summary>
+    public override void Reset()
+    {
+        for (int y = 0; y < GridHeight; y++)
+            for (int x = 0; x < GridWidth; x++)
+                animalsOnTiles[x, y] = null;
+
+        FirstMoveMade = false;
+        base.Reset();
+    }
+
+
+    /// <summary>
     /// Marks the given animal as the selected one.
     /// </summary>
     /// <param name="animal">The animal to select.</param>
     public void SelectAnimal(MovableAnimal animal)
     {
         selector.SelectedAnimal = animal;
+    }
+
+    /// <summary>
+    /// Updates the game's status after a pair of matching penguins has been created.
+    /// </summary>
+    /// <param name="penguin1">The first penguin.</param>
+    /// <param name="penguin2">The second penguin.</param>
+    public void PairFound(MovableAnimal penguin1, MovableAnimal penguin2)
+    {
+        int penguinType = MathHelper.Max(penguin1.AnimalIndex, penguin2.AnimalIndex);
+        pairList.AddPair(penguinType);
+
+        // if the level has been completed, notify the playing state
+        if (pairList.Completed)
+        {
+            PlayingState playingState = (PlayingState)ExtendedGame
+                .GameStateManager.GetGameState(PenguinPairsGame.StateName_Playing);
+            playingState.LevelCompleted(LevelIndex);
+        }
+        else
+            ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_pair");
+
+    }
+
+    /// <summary>
+    /// Makes the hint arrow visible for a few seconds.
+    /// </summary>
+    public void ShowHint()
+    {
+        hintTimer.StartVisible(2);
     }
 
     public void AddAnimalToGrid(Animal animal, Point gridPosition)
@@ -272,6 +334,9 @@ public class Level : GameObjectList
     public void RemoveAnimalFromGrid(Point gridPosition)
     {
         animalsOnTiles[gridPosition.X, gridPosition.Y] = null;
+        // store the fact that the player has made a move
+        if (!FirstMoveMade)
+            FirstMoveMade = true;
     }
 
     bool IsPositionInGrid(Point gridPosition)

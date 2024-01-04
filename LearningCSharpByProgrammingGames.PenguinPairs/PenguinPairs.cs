@@ -1,9 +1,7 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
 using LearningCSharpByProgrammingGames.PenguinPairs.GameStates;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace LearningCSharpByProgrammingGames.PenguinPairs;
@@ -60,6 +58,9 @@ public class PenguinPairsGame : ExtendedGame
 
         // start at the title screen
         GameStateManager.SwitchTo(StateName_Title);
+
+        // play the background music
+        AssetManager.PlaySong("Sounds/snd_music", true);
     }
     void LoadProgress()
     {
@@ -121,5 +122,22 @@ public class PenguinPairsGame : ExtendedGame
             }
         }
         w.Close();
+    }
+    /// <summary>
+    /// Sends the player to the next level, 
+    /// or back to the level selection screen if there is no next level.
+    /// </summary>
+    /// <param name="levelIndex"></param>
+    public static void GoToNextLevel(int levelIndex)
+    {
+        if (levelIndex == NumberOfLevels)
+            GameStateManager.SwitchTo(StateName_LevelSelect);
+
+        else
+        {
+            PlayingState playingState =
+            (PlayingState)GameStateManager.GetGameState(StateName_Playing);
+            playingState.LoadLevel(levelIndex + 1);
+        }
     }
 }
