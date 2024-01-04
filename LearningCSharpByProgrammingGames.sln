@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningCSharpByProgramming
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningCSharpByProgrammingGames.JewelJam", "LearningCSharpByProgrammingGames.JewelJam\LearningCSharpByProgrammingGames.JewelJam.csproj", "{667EAB10-42CD-42D7-BC7A-B8BC9B2B43D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningCSharpByProgrammingGames.PenguinPairs", "LearningCSharpByProgrammingGames.PenguinPairs\LearningCSharpByProgrammingGames.PenguinPairs.csproj", "{2450DA61-EB29-4975-A386-ECED27289BDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningCSharpByProgrammingGames.PenguinPairs", "LearningCSharpByProgrammingGames.PenguinPairs\LearningCSharpByProgrammingGames.PenguinPairs.csproj", "{2450DA61-EB29-4975-A386-ECED27289BDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningCSharpByProgrammingGames.TickTick", "LearningCSharpByProgrammingGames.TickTick\LearningCSharpByProgrammingGames.TickTick.csproj", "{6CE202AA-15F7-456C-BAC3-4710A561B05B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2450DA61-EB29-4975-A386-ECED27289BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2450DA61-EB29-4975-A386-ECED27289BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2450DA61-EB29-4975-A386-ECED27289BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE202AA-15F7-456C-BAC3-4710A561B05B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE202AA-15F7-456C-BAC3-4710A561B05B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE202AA-15F7-456C-BAC3-4710A561B05B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE202AA-15F7-456C-BAC3-4710A561B05B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
