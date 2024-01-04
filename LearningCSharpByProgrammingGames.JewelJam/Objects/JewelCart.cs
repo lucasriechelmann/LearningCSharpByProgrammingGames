@@ -47,7 +47,7 @@ public class JewelCart : SpriteGameObject
 
     public override void Reset()
     {
-        _velocity.X = speed;
+        velocity.X = speed;
         LocalPosition = new Vector2(startX, LocalPosition.Y);
     }
 }

@@ -41,7 +41,7 @@ public class Jewel : SpriteGameObject
     {
         // smoothly move to the target position
         Vector2 diff = TargetPosition - LocalPosition;
-        _velocity = diff * 8;
+        velocity = diff * 8;
 
         base.Update(gameTime);
         _glitters.Update(gameTime);

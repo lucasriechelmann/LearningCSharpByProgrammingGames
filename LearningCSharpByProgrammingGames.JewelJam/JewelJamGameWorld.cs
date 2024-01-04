@@ -101,8 +101,7 @@ public class JewelJamGameWorld : GameState
         ExtendedGame.AssetManager.PlaySong("snd_music", true);
 
         GoToState(GameState.TitleScreen);
-    }
-    public void AddChild(GameObject gameObject) => _gameObjects.AddChild(gameObject);
+    }    
     public override void HandleInput(InputHelper inputHelper)
     {
         if (_currentState == GameState.Playing)
