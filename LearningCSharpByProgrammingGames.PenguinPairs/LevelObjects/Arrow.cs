@@ -9,15 +9,15 @@ public class Arrow : Button
     public Arrow(int sheetIndex) : base("Sprites/LevelObjects/spr_arrow1@4")
     {
         SheetIndex = sheetIndex;
-        _normalSprite = _sprite;
+        _normalSprite = sprite;
         _hoverSprite = new("Sprites/LevelObjects/spr_arrow2@4", sheetIndex);        
     }
     public override void HandleInput(InputHelper inputHelper)
     {
         base.HandleInput(inputHelper);
         if(BoundingBox.Contains(inputHelper.MousePositionWorld))
-            _sprite = _hoverSprite;
+            sprite = _hoverSprite;
         else
-            _sprite = _normalSprite;
+            sprite = _normalSprite;
     }
 }

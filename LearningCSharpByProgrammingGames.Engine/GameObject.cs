@@ -3,15 +3,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LearningCSharpByProgrammingGames.Engine;
 
-/// <summary>
-/// A class for objects in the game world with a position and velocity.
-/// </summary>
-public abstract class GameObject : IGameLoopObject
+public class GameObject : IGameLoopObject
 {
     /// <summary>
     /// The position of this game object, relative to its parent in the game-object hierachy.
     /// </summary>
-    public Vector2 LocalPosition { get; set; }
+    public Vector2 LocalPosition
+    {
+        get { return localPosition; }
+        set { localPosition = value; }
+    }
+    protected Vector2 localPosition;
 
     /// <summary>
     /// The current velocity of this game object, in units per second.
@@ -90,5 +92,4 @@ public abstract class GameObject : IGameLoopObject
             return LocalPosition + Parent.GlobalPosition;
         }
     }
-
 }

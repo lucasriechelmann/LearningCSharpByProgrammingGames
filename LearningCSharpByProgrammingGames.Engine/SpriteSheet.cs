@@ -7,45 +7,64 @@ namespace LearningCSharpByProgrammingGames.Engine;
 /// </summary>
 public class SpriteSheet
 {
-    Texture2D _sprite;
-    Rectangle _spriteRectangle;
-    int _sheetIndex, _sheetColumns, _sheetRows;    
-    public SpriteSheet(string assetName, int sheetIndex = 0)
-    {
-        // retrieve the sprite
-        _sprite = ExtendedGame.AssetManager.LoadSprite(assetName);
+    Texture2D sprite;
+    Rectangle spriteRectangle;
+    public Texture2D Texture => sprite;
 
-        _sheetColumns = 1;
-        _sheetRows = 1;
+    int sheetIndex;
+    int sheetColumns;
+    int sheetRows;
+
+    /// <summary>
+    /// Gets or sets whether the displayed sprite should be mirrored.
+    /// </summary>
+    public bool Mirror { get; set; }
+
+    float depth;
+
+    bool[,] pixelTransparency;
+
+    /// <summary>
+    /// Creates a new SpriteSheet with the given details.
+    /// </summary>
+    /// <param name="assetname">The name of the asset to load. 
+    /// The number of sprites in the sheet will be extracted from this filename.</param>
+    /// <param name="depth">The depth at which the sprite should be drawn.</param>
+    /// <param name="sheetIndex">The sprite sheet index to use initially.</param>
+    public SpriteSheet(string assetname, float depth, int sheetIndex = 0)
+    {
+        this.depth = depth;
+
+        // retrieve the sprite
+        sprite = ExtendedGame.AssetManager.LoadSprite(assetname);
+
+        // for all pixels, check if they are transparent
+        Color[] colorData = new Color[sprite.Width * sprite.Height];
+        sprite.GetData(colorData);
+        pixelTransparency = new bool[sprite.Width, sprite.Height];
+        for (int i = 0; i < colorData.Length; ++i)
+            pixelTransparency[i % sprite.Width, i / sprite.Width] = colorData[i].A == 0;
+
+        sheetColumns = 1;
+        sheetRows = 1;
 
         // see if we can extract the number of sheet elements from the assetname
-        string[] assetSplit = assetName.Split('@');
+        string[] assetSplit = assetname.Split('@');
         if (assetSplit.Length >= 2)
         {
             // behind the last '@' symbol, there should be a number.
             // This number can be followed by an 'x' and then another number.
             string sheetNrData = assetSplit[assetSplit.Length - 1];
             string[] columnAndRow = sheetNrData.Split('x');
-            _sheetColumns = int.Parse(columnAndRow[0]);
+            sheetColumns = int.Parse(columnAndRow[0]);
             if (columnAndRow.Length == 2)
-                _sheetRows = int.Parse(columnAndRow[1]);
+                sheetRows = int.Parse(columnAndRow[1]);
         }
-
-        // apply the sheet index; this will also calculate spriteRectangle
-        SheetIndex = sheetIndex;        
-    }
-    public SpriteSheet(string assetName, int sheetColumns, int sheetRows, int sheetIndex = 0)
-    {
-        // retrieve the sprite
-        _sprite = ExtendedGame.AssetManager.LoadSprite(assetName);
-
-        _sheetColumns = sheetColumns;
-        _sheetRows = sheetRows;
 
         // apply the sheet index; this will also calculate spriteRectangle
         SheetIndex = sheetIndex;
     }
-    public Texture2D Texture => _sprite;
+
     /// <summary>
     /// Draws the sprite (or the appropriate part of it) at the desired position.
     /// </summary>
@@ -54,54 +73,90 @@ public class SpriteSheet
     /// <param name="origin">An origin that should be subtracted from the drawing position.</param>
     public void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 origin)
     {
-        spriteBatch.Draw(_sprite, 
-            position, 
-            _spriteRectangle, 
-            Color.White, 
-            0, 
-            origin, 
-            1, 
-            SpriteEffects.None, 
-            0);
+        // mirror the sprite?
+        SpriteEffects spriteEffects = SpriteEffects.None;
+        if (Mirror)
+            spriteEffects = SpriteEffects.FlipHorizontally;
+
+        spriteBatch.Draw(sprite, position, spriteRectangle, Color.White,
+            0.0f, origin, 1.0f, spriteEffects, depth);
     }
+
     /// <summary>
     /// Gets the width of a single sprite in this sprite sheet.
     /// </summary>
-    public int Width => _sprite.Width / _sheetColumns;
+    public int Width
+    {
+        get { return sprite.Width / sheetColumns; }
+    }
+
     /// <summary>
     /// Gets the height of a single sprite in this sprite sheet.
     /// </summary>
-    public int Height => _sprite.Height / _sheetRows;
+    public int Height
+    {
+        get { return sprite.Height / sheetRows; }
+    }
+
     /// <summary>
     /// Gets a vector that represents the center of a single sprite in this sprite sheet.
     /// </summary>
-    public Vector2 Center => new Vector2(Width, Height) / 2;
+    public Vector2 Center
+    {
+        get { return new Vector2(Width, Height) / 2; }
+    }
+
     /// <summary>
     /// Gets or sets the sprite index within this sprite sheet to use. 
     /// If you set a new index, the object will recalculate which part of the sprite should be drawn.
     /// </summary>
     public int SheetIndex
     {
-        get => _sheetIndex;
+        get { return sheetIndex; }
         set
         {
-            if (value >= 0 && value < NumberOfSheetElements)
+            if (value < NumberOfSheetElements && value >= 0)
             {
-                _sheetIndex = value;
+                sheetIndex = value;
 
                 // recalculate the part of the sprite to draw
-                int columnIndex = _sheetIndex % _sheetColumns;
-                int rowIndex = _sheetIndex / _sheetColumns;
-                _spriteRectangle = new Rectangle(columnIndex * Width, rowIndex * Height, Width, Height);
+                int columnIndex = sheetIndex % sheetColumns;
+                int rowIndex = sheetIndex / sheetColumns;
+                spriteRectangle = new Rectangle(columnIndex * Width, rowIndex * Height, Width, Height);
             }
         }
     }
+
     /// <summary>
     /// Gets a Rectangle that represents the bounds of a single sprite in this sprite sheet.
     /// </summary>
-    public Rectangle Bounds => new Rectangle(0, 0, Width, Height);
+    public Rectangle Bounds
+    {
+        get
+        {
+            return new Rectangle(0, 0, Width, Height);
+        }
+    }
+
     /// <summary>
     /// Gets the total number of elements in this sprite sheet.
     /// </summary>
-    public int NumberOfSheetElements => _sheetColumns * _sheetRows;
+    public int NumberOfSheetElements
+    {
+        get { return sheetColumns * sheetRows; }
+    }
+
+    /// <summary>
+    /// Returns whether or not the pixel at a given coordinate is transparent.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the pixel.</param>
+    /// <param name="y">The y-coordinate of the pixel.</param>
+    /// <returns>true if the given pixel is fully transparent; false if it is not.</returns>
+    public bool IsPixelTransparent(int x, int y)
+    {
+        int column = sheetIndex % sheetColumns;
+        int row = sheetIndex / sheetColumns % sheetRows;
+
+        return pixelTransparency[column * Width + x, row * Height + y];
+    }
 }

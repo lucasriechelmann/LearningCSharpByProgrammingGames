@@ -1,3 +1,3 @@
 ﻿
-using var game = new LearningCSharpByProgrammingGames.TickTick.Game1();
+using var game = new LearningCSharpByProgrammingGames.TickTick.TickTickGame();
 game.Run();

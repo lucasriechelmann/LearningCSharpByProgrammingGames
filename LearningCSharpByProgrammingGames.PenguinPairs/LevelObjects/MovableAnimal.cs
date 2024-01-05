@@ -29,7 +29,7 @@ public class MovableAnimal : Animal
         private set
         {
             isInHole = value;
-            _sprite = new SpriteSheet(GetSpriteName(isInHole), AnimalIndex);
+            sprite = new SpriteSheet(GetSpriteName(isInHole), AnimalIndex);
         }
     }
 

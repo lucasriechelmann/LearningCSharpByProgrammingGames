@@ -1,21 +1,38 @@
 ﻿namespace LearningCSharpByProgrammingGames.Engine.UI;
 
+/// <summary>
+/// A class that can represent a UI switch that can be turned on or off.
+/// It's essentially a button with an extra state that says whether it's turned on.
+/// </summary>
 public class Switch : Button
 {
-    bool selected;
+    protected bool selected;
+
+    /// <summary>
+    /// Creates a new <see cref="Switch"/> with the given sprite name and depth.
+    /// </summary>
+    /// <param name="assetName">The name of the sprite to use.</param>
+    /// <param name="depth">The depth at which the object should be drawn.</param>
+    public Switch(string assetName, float depth) : base(assetName, depth)
+    {
+        Selected = false;
+    }
+
+    /// <summary>
+    /// Whether or not this switch is currently selected.
+    /// If you change this value, the switch will receive a different sprite sheet index.
+    /// </summary>
     public bool Selected
     {
         get { return selected; }
         set
         {
             selected = value;
-            SheetIndex = selected ? 1 : 0;
+            if (selected)
+                SheetIndex = 1;
+            else
+                SheetIndex = 0;
         }
-    }
-
-    public Switch(string assetName) : base(assetName)
-    {
-        Selected = false;
     }
 
     public override void HandleInput(InputHelper inputHelper)

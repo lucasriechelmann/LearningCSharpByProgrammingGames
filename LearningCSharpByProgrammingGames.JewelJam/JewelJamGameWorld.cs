@@ -55,7 +55,7 @@ public class JewelJamGameWorld : GameState
     {
         _game = game;
         // add the background
-        SpriteGameObject background = new SpriteGameObject("spr_background");
+        SpriteGameObject background = new SpriteGameObject("spr_background", 0);
         Size = new Point(background.Width, background.Height);
         AddChild(background);
 
@@ -72,7 +72,7 @@ public class JewelJamGameWorld : GameState
         playingField.AddChild(new RowSelector(grid));
 
         //add a background sprite for the score object
-        SpriteGameObject scoreFrame = new("spr_scoreframe");
+        SpriteGameObject scoreFrame = new("spr_scoreframe", 1);
         scoreFrame.LocalPosition = new Vector2(20, 20);
         AddChild(scoreFrame);
 
@@ -86,7 +86,7 @@ public class JewelJamGameWorld : GameState
         AddChild(_jewelCart);
 
         //add help button
-        _helpButton = new("spr_button_help");
+        _helpButton = new("spr_button_help", 0);
         _helpButton.LocalPosition = new Vector2(1270, 20);
         AddChild(_helpButton);
 
@@ -94,9 +94,9 @@ public class JewelJamGameWorld : GameState
         _timerDouble = AddcomboImageWithTime("spr_double");
         _timerTriple = AddcomboImageWithTime("spr_triple");
 
-        _titleScreen = AddOverlay("spr_title");
-        _gameOverScreen = AddOverlay("spr_gameover");
-        _helpScreen = AddOverlay("spr_frame_help");
+        _titleScreen = AddOverlay("spr_title", 2);
+        _gameOverScreen = AddOverlay("spr_gameover", 2);
+        _helpScreen = AddOverlay("spr_frame_help", 2);
 
         ExtendedGame.AssetManager.PlaySong("snd_music", true);
 
@@ -141,9 +141,9 @@ public class JewelJamGameWorld : GameState
         }
         
     }
-    SpriteGameObject AddOverlay(string spriteName)
+    SpriteGameObject AddOverlay(string spriteName, int depht)
     {
-        SpriteGameObject overlay = new(spriteName);
+        SpriteGameObject overlay = new(spriteName, depht);
         overlay.SetOriginToCenter();
         overlay.LocalPosition = new Vector2(Size.X / 2, Size.Y / 2);
         AddChild(overlay);
@@ -152,7 +152,7 @@ public class JewelJamGameWorld : GameState
     VisibilityTimer AddcomboImageWithTime(string spriteName)
     {
         // create and add the image
-        SpriteGameObject image = new(spriteName);
+        SpriteGameObject image = new(spriteName, 0);
         image.Visible = false;
         image.LocalPosition = new Vector2(800, 400);
         AddChild(image);

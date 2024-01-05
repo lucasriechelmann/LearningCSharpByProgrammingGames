@@ -16,12 +16,12 @@ public class JewelCart : SpriteGameObject
     float startX;
     GlitterField _glitters;
     public JewelCart(Vector2 startPosition)
-        : base("spr_jewelcart")
+        : base("spr_jewelcart", 1)
     {
         LocalPosition = startPosition;
         startX = startPosition.X;
 
-        _glitters = new GlitterField(_sprite, 40, new Rectangle(275, 470, 430, 85));
+        _glitters = new GlitterField(sprite, 40, new Rectangle(275, 470, 430, 85));
         _glitters.Parent = this;
     }
     public override void Update(GameTime gameTime)

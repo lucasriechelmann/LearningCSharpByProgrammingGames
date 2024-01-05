@@ -4,9 +4,17 @@
 /// </summary>
 public class Button : SpriteGameObject
 {
+    /// <summary>
+    /// Whether this button has been pressed (clicked) in the current frame.
+    /// </summary>
     public bool Pressed { get; protected set; }
 
-    public Button(string assetName) : base(assetName)
+    /// <summary>
+    /// Creates a new <see cref="Button"/> with the given sprite name and depth.
+    /// </summary>
+    /// <param name="assetName">The name of the sprite to use.</param>
+    /// <param name="depth">The depth at which the button should be drawn.</param>
+    public Button(string assetName, float depth) : base(assetName, depth)
     {
         Pressed = false;
     }

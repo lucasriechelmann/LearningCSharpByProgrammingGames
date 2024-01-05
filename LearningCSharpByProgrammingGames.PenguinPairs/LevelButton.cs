@@ -25,7 +25,7 @@ public class LevelButton : Button
         // add a label that shows the level index
         label = new TextGameObject("Fonts/ScoreFont",
             Color.Black, TextGameObject.Alignment.Center);
-        label.LocalPosition = _sprite.Center + new Vector2(0, 12);
+        label.LocalPosition = sprite.Center + new Vector2(0, 12);
         label.Parent = this;
         label.Text = levelIndex.ToString();
     }
@@ -46,8 +46,8 @@ public class LevelButton : Button
         set
         {
             status = value;
-            _sprite = new SpriteSheet(GetSpriteNameForStatus(status));
-            SheetIndex = (LevelIndex - 1) % _sprite.NumberOfSheetElements;
+            sprite = new SpriteSheet(GetSpriteNameForStatus(status));
+            SheetIndex = (LevelIndex - 1) % sprite.NumberOfSheetElements;
         }
     }
 
