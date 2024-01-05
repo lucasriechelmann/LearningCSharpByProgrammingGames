@@ -10,17 +10,17 @@ public class TitleMenuState : GameState
     Button _playButton, _optionsButton, _helpButton;
     public TitleMenuState()
     {
-        AddChild(new SpriteGameObject("Sprites/spr_titlescreen"));
+        AddChild(new SpriteGameObject("Sprites/spr_titlescreen", 0));
         
-        _playButton = new Button("Sprites/UI/spr_button_play");
+        _playButton = new Button("Sprites/UI/spr_button_play", 0);
         _playButton.LocalPosition = new Vector2(415, 540);
         AddChild(_playButton);
 
-        _optionsButton = new Button("Sprites/UI/spr_button_options");
+        _optionsButton = new Button("Sprites/UI/spr_button_options", 0);
         _optionsButton.LocalPosition = new Vector2(415, 650);
         AddChild(_optionsButton);
 
-        _helpButton = new Button("Sprites/UI/spr_button_help");
+        _helpButton = new Button("Sprites/UI/spr_button_help", 0);
         _helpButton.LocalPosition = new Vector2(415, 760);
         AddChild(_helpButton);
     }

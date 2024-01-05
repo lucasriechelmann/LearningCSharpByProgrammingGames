@@ -17,11 +17,11 @@ public abstract class ExtendedGame : Game
     /// <summary>
     /// The width and height of the game world, in game units.
     /// </summary>
-    protected Point _worldSize;
+    protected Point worldSize;
     /// <summary>
     /// The width and height of the window, in pixels.
     /// </summary>
-    protected Point _windowSize;
+    protected Point windowSize;
     /// <summary>
     /// A matrix used for scaling the game world so that it fits inside the window.
     /// </summary>
@@ -53,8 +53,8 @@ public abstract class ExtendedGame : Game
         Random = new();
 
         // default window and world size
-        _worldSize = new Point(1024, 768);
-        _windowSize = new Point(1024, 768);
+        worldSize = new Point(1024, 768);
+        windowSize = new Point(1024, 768);
         
         
     }
@@ -133,7 +133,7 @@ public abstract class ExtendedGame : Game
                 GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
                 GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
         else
-            screenSize = _windowSize;
+            screenSize = windowSize;
 
 
         // scale the window to the desired size
@@ -147,8 +147,8 @@ public abstract class ExtendedGame : Game
 
         // calculate how the graphics should be scaled, so that the game world fits inside the window
         _spriteScale = Matrix.CreateScale(
-            (float)GraphicsDevice.Viewport.Width / _worldSize.X,
-            (float)GraphicsDevice.Viewport.Height / _worldSize.Y,
+            (float)GraphicsDevice.Viewport.Width / worldSize.X,
+            (float)GraphicsDevice.Viewport.Height / worldSize.Y,
             1f);
     }
     /// <summary>
@@ -162,7 +162,7 @@ public abstract class ExtendedGame : Game
         Viewport viewport = new();
 
         // calculate the two aspect ratios
-        float gameAspectRatio = _worldSize.X / (float)_worldSize.Y;
+        float gameAspectRatio = worldSize.X / (float)worldSize.Y;
         float windowAspectRatio = windowSize.X / (float)windowSize.Y;
 
         //if the window is relatively wide, use the full window height
@@ -201,7 +201,7 @@ public abstract class ExtendedGame : Game
         Vector2 viewportTopLeft = new(
             GraphicsDevice.Viewport.X,
             GraphicsDevice.Viewport.Y);
-        float screenToWorldScale = _worldSize.X / (float)GraphicsDevice.Viewport.Width;
+        float screenToWorldScale = worldSize.X / (float)GraphicsDevice.Viewport.Width;
         return (screenPosition - viewportTopLeft) * screenToWorldScale;
     }
 }

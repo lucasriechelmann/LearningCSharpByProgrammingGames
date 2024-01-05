@@ -94,19 +94,19 @@ public class Level : GameObjectList
     void AddLevelInfoObjects(string title, string description)
     {
         // - background box
-        SpriteGameObject infoBackground = new SpriteGameObject("Sprites/spr_level_info");
+        SpriteGameObject infoBackground = new SpriteGameObject("Sprites/spr_level_info", 0);
         infoBackground.SetOriginToCenter();
         infoBackground.LocalPosition = new Vector2(600, 820);
         AddChild(infoBackground);
 
         // - title text
-        TextGameObject titleText = new TextGameObject("Fonts/HelpFont", Color.Blue, TextGameObject.Alignment.Center);
+        TextGameObject titleText = new TextGameObject("Fonts/HelpFont", 0, Color.Blue, TextGameObject.Alignment.Center);
         titleText.Text = LevelIndex + " - " + title;
         titleText.LocalPosition = new Vector2(600, 786);
         AddChild(titleText);
 
         // - description text
-        TextGameObject descriptionText = new TextGameObject("Fonts/HelpFont", Color.DarkBlue, TextGameObject.Alignment.Center);
+        TextGameObject descriptionText = new TextGameObject("Fonts/HelpFont", 0, Color.DarkBlue, TextGameObject.Alignment.Center);
         descriptionText.Text = description;
         descriptionText.LocalPosition = new Vector2(600, 820);
         AddChild(descriptionText);

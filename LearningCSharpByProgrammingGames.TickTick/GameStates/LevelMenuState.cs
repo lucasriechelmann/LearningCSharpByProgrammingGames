@@ -1,9 +1,10 @@
-﻿using LearningCSharpByProgrammingGames.Engine;
+﻿using LearningCSharpByProgrammingGames.Engine.Levels;
 using LearningCSharpByProgrammingGames.Engine.UI;
+using LearningCSharpByProgrammingGames.Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 
-namespace LearningCSharpByProgrammingGames.PenguinPairs.GameStates;
+namespace LearningCSharpByProgrammingGames.TickTick.GameStates;
+
 public class LevelMenuState : GameState
 {
     Button backButton;
@@ -15,28 +16,27 @@ public class LevelMenuState : GameState
     public LevelMenuState()
     {
         // add a background
-        SpriteGameObject background = new SpriteGameObject("Sprites/spr_background_levelselect", 0);
+        SpriteGameObject background = new SpriteGameObject("Sprites/Backgrounds/spr_levelselect", TickTickGame.Depth_Background);
         gameObjects.AddChild(background);
 
         // add a back button
-        backButton = new Button("Sprites/UI/spr_button_back", 0);
-        backButton.LocalPosition = new Vector2(415, 720);
+        backButton = new Button("Sprites/UI/spr_button_back", TickTickGame.Depth_UIForeground);
+        backButton.LocalPosition = new Vector2(720, 690);
+        backButton.SetOriginToCenter();
         gameObjects.AddChild(backButton);
 
         // Add a level button for each level.
-        // For now, let's pretend that there are 12 levels, without actually loading them yet.
-        int numberOfLevels = 12;
-        levelButtons = new LevelButton[numberOfLevels];
+        levelButtons = new LevelButton[ExtendedGameWithLevels.NumberOfLevels];
 
-        Vector2 gridOffset = new Vector2(155, 230);
-        const int buttonsPerRow = 5;
-        const int spaceBetweenColumns = 30;
-        const int spaceBetweenRows = 5;
+        Vector2 gridOffset = new Vector2(395, 175);
+        const int buttonsPerRow = 4;
+        const int spaceBetweenColumns = 20;
+        const int spaceBetweenRows = 20;
 
-        for (int i = 0; i < PenguinPairsGame.NumberOfLevels; i++)
+        for (int i = 0; i < ExtendedGameWithLevels.NumberOfLevels; i++)
         {
             // create the button
-            LevelButton levelButton = new LevelButton(i + 1, PenguinPairsGame.GetLevelStatus(i + 1));
+            LevelButton levelButton = new LevelButton(i + 1, ExtendedGameWithLevels.GetLevelStatus(i + 1));
 
             // give it the correct position
             int row = i / buttonsPerRow;
@@ -60,7 +60,7 @@ public class LevelMenuState : GameState
 
         // if the back button is pressed, go back to the title screen
         if (backButton.Pressed)
-            ExtendedGame.GameStateManager.SwitchTo(PenguinPairsGame.StateName_Title);
+            ExtendedGame.GameStateManager.SwitchTo(ExtendedGameWithLevels.StateName_Title);
 
         // if a (non-locked) level button has been pressed, go to that level
         foreach (LevelButton button in levelButtons)
@@ -68,12 +68,10 @@ public class LevelMenuState : GameState
             if (button.Pressed && button.Status != LevelStatus.Locked)
             {
                 // go to the playing state
-                ExtendedGame.GameStateManager.SwitchTo(PenguinPairsGame.StateName_Playing);
+                ExtendedGame.GameStateManager.SwitchTo(ExtendedGameWithLevels.StateName_Playing);
 
                 // load the correct level
-                PlayingState playingState = (PlayingState)ExtendedGame
-                    .GameStateManager.GetGameState(PenguinPairsGame.StateName_Playing);
-                playingState.LoadLevel(button.LevelIndex);
+                ExtendedGameWithLevels.GetPlayingState().LoadLevel(button.LevelIndex);
 
                 return;
             }
@@ -85,8 +83,8 @@ public class LevelMenuState : GameState
         base.Update(gameTime);
         foreach (LevelButton button in levelButtons)
         {
-            if (button.Status != PenguinPairsGame.GetLevelStatus(button.LevelIndex))
-                button.Status = PenguinPairsGame.GetLevelStatus(button.LevelIndex);
+            if (button.Status != ExtendedGameWithLevels.GetLevelStatus(button.LevelIndex))
+                button.Status = ExtendedGameWithLevels.GetLevelStatus(button.LevelIndex);
         }
     }
 }

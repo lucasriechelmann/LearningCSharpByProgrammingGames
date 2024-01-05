@@ -23,7 +23,7 @@ namespace LearningCSharpByProgrammingGames.JewelJam
             GameStateManager.SwitchTo("Jewel Jam");
 
             // to re-scale the game world to the screen size, we need to set the FullScreen property again
-            _worldSize = GameWorld.Size;
+            worldSize = GameWorld.Size;
             FullScreen = false;
         }
         public static JewelJamGameWorld GameWorld => GameStateManager.GetGameState("Jewel Jam") as JewelJamGameWorld;

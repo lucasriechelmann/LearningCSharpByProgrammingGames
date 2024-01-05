@@ -1,48 +1,48 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
+using LearningCSharpByProgrammingGames.Engine.Levels;
+using LearningCSharpByProgrammingGames.TickTick.GameStates;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace LearningCSharpByProgrammingGames.TickTick
 {
-    public class TickTickGame : ExtendedGame
-    {        
+    public class TickTickGame : ExtendedGameWithLevels
+    {
+        public const float Depth_Background = 0; // for background images
+        public const float Depth_UIBackground = 0.9f; // for UI elements with text on top of them
+        public const float Depth_UIForeground = 1; // for UI elements in front
+        public const float Depth_LevelTiles = 0.5f; // for tiles in the level
+        public const float Depth_LevelObjects = 0.6f; // for all game objects except the player
+        public const float Depth_LevelPlayer = 0.7f; // for the player
         public TickTickGame()
         {            
             IsMouseVisible = true;
         }
 
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
-        }
-
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            base.LoadContent();
 
-            // TODO: use this.Content to load your game content here
-        }
+            // set a custom world and window size
+            worldSize = new Point(1440, 825);
+            windowSize = new Point(1024, 586);
 
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            // to let these settings take effect, we need to set the FullScreen property again
+            FullScreen = false;
 
-            // TODO: Add your update logic here
+            // load the player's progress from a file
+            LoadProgress();
 
-            base.Update(gameTime);
-        }
+            // add the game states
+            GameStateManager.AddGameState(StateName_Title, new TitleMenuState());
+            GameStateManager.AddGameState(StateName_LevelSelect, new LevelMenuState());
+            GameStateManager.AddGameState(StateName_Help, new HelpState());
+            GameStateManager.AddGameState(StateName_Playing, new PlayingState());
 
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            // start at the title screen
+            GameStateManager.SwitchTo(StateName_Title);
 
-            // TODO: Add your drawing code here
-
-            base.Draw(gameTime);
+            // play background music
+            AssetManager.PlaySong("Sounds/snd_music", true);
         }
     }
 }

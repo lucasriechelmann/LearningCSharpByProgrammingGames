@@ -17,7 +17,7 @@ public class PairList : GameObjectList
     public PairList(int nrPairs)
     {
         // add the background image
-        AddChild(new SpriteGameObject("Sprites/spr_frame_goal"));
+        AddChild(new SpriteGameObject("Sprites/spr_frame_goal", 0));
 
         // add a sprite object for each pair that the player should make
         Vector2 offset = new Vector2(100, 7);

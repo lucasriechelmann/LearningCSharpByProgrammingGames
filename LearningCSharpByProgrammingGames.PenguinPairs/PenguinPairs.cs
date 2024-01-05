@@ -40,8 +40,8 @@ public class PenguinPairsGame : ExtendedGame
         base.LoadContent();
 
         // set a custom world and window size
-        _worldSize = new Point(1200, 900);
-        _windowSize = new Point(1024, 768);
+        worldSize = new Point(1200, 900);
+        windowSize = new Point(1024, 768);
 
         // to let these settings take effect, we need to set the FullScreen property again
         FullScreen = false;

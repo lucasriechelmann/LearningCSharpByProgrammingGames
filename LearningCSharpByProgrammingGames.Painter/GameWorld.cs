@@ -1,4 +1,4 @@
-﻿using LearningCSharpByProgrammingGames.Painter.Managers;
+﻿using LearningCSharpByProgrammingGames.Engine;
 using LearningCSharpByProgrammingGames.Painter.Objects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

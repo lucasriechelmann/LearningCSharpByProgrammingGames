@@ -16,13 +16,13 @@ public class Tile : GameObject
         switch(type)
         {
             case Type.Normal:
-                _image = new("Sprites/LevelObjects/spr_field@2", (x + y) % 2);
+                _image = new("Sprites/LevelObjects/spr_field@2", 0, (x + y) % 2);
                 break;
             case Type.Wall:
-                _image = new("Sprites/LevelObjects/spr_wall");
+                _image = new("Sprites/LevelObjects/spr_wall", 0);
                 break;
             case Type.Hole:
-                _image = new("Sprites/LevelObjects/spr_hole");
+                _image = new("Sprites/LevelObjects/spr_hole", 0);
                 break;
         }
 

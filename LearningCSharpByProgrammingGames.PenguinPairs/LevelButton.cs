@@ -17,13 +17,13 @@ public class LevelButton : Button
     TextGameObject label;
 
     public LevelButton(int levelIndex, LevelStatus startStatus)
-        : base(GetSpriteNameForStatus(startStatus))
+        : base(GetSpriteNameForStatus(startStatus), 0)
     {
         LevelIndex = levelIndex;
         Status = startStatus;
 
         // add a label that shows the level index
-        label = new TextGameObject("Fonts/ScoreFont",
+        label = new TextGameObject("Fonts/ScoreFont", 0,
             Color.Black, TextGameObject.Alignment.Center);
         label.LocalPosition = sprite.Center + new Vector2(0, 12);
         label.Parent = this;
@@ -46,7 +46,7 @@ public class LevelButton : Button
         set
         {
             status = value;
-            sprite = new SpriteSheet(GetSpriteNameForStatus(status));
+            sprite = new SpriteSheet(GetSpriteNameForStatus(status), 0);
             SheetIndex = (LevelIndex - 1) % sprite.NumberOfSheetElements;
         }
     }

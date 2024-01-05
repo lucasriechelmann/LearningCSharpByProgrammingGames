@@ -1,10 +1,9 @@
-﻿using LearningCSharpByProgrammingGames.Painter.Managers;
+﻿using LearningCSharpByProgrammingGames.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Reflection.Metadata;
 
 namespace LearningCSharpByProgrammingGames.Painter.Objects;
 /// <summary>
@@ -52,8 +51,8 @@ public class Cannon : ThreeColorGameObject
         }
 
         // change the angle depending on the mouse position
-        double opposite = inputHelper.MousePosition.Y - _position.Y;
-        double adjacent = inputHelper.MousePosition.X - _position.X;
+        double opposite = inputHelper.MousePositionScreen.Y - _position.Y;
+        double adjacent = inputHelper.MousePositionScreen.X - _position.X;
         _barrelRotation = (float)Math.Atan2(opposite, adjacent);
     }
     /// <summary>

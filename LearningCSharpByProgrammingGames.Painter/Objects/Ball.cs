@@ -1,4 +1,4 @@
-﻿using LearningCSharpByProgrammingGames.Painter.Managers;
+﻿using LearningCSharpByProgrammingGames.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -41,7 +41,7 @@ public class Ball : ThreeColorGameObject
         {
             _shooting = true;
             // compute a velocity based on the mouse position
-            _velocity = (inputHelper.MousePosition - Painter.GameWorld.Cannon.Position) * 1.2f;
+            _velocity = (inputHelper.MousePositionScreen - Painter.GameWorld.Cannon.Position) * 1.2f;
             // play a sound effect
             _soundShoot.Play();
         }

@@ -5,7 +5,7 @@ namespace LearningCSharpByProgrammingGames.JewelJam.Objects;
 
 public class ScoreGameObject : TextGameObject
 {
-    public ScoreGameObject() : base("JewelJamFont", Color.White, Alignment.Right)
+    public ScoreGameObject() : base("JewelJamFont", 1, Color.White, Alignment.Right)
     {
         
     }

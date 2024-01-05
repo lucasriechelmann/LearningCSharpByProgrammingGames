@@ -1,22 +1,16 @@
-﻿using LearningCSharpByProgrammingGames.Painter.Managers;
-using LearningCSharpByProgrammingGames.Painter.Objects;
+﻿using LearningCSharpByProgrammingGames.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using System;
 
 namespace LearningCSharpByProgrammingGames.Painter
 {
-    public class Painter : Game
+    public class Painter : ExtendedGame
     {
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
-        InputHelper _inputHelper;
         static GameWorld _gameWorld;
         public static GameWorld GameWorld => _gameWorld;
         public static Vector2 ScreenSize { get; set; }
-        public static Random Random { get; private set; }
         public Painter()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -35,9 +29,8 @@ namespace LearningCSharpByProgrammingGames.Painter
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _inputHelper = new InputHelper();
+            _inputHelper = new InputHelper(this);
             _gameWorld = new GameWorld(Content);
-            Random = new Random();
         }
 
         protected override void Update(GameTime gameTime)

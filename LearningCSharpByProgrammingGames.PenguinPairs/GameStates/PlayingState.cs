@@ -16,28 +16,28 @@ public class PlayingState : GameState
     public PlayingState()
     {
         // add a background
-        SpriteGameObject background = new SpriteGameObject("Sprites/spr_background_level");
-        _gameObjects.AddChild(background);
+        SpriteGameObject background = new SpriteGameObject("Sprites/spr_background_level", 0);
+        gameObjects.AddChild(background);
 
         // add a "hint" button
-        hintButton = new Button("Sprites/UI/spr_button_hint");
+        hintButton = new Button("Sprites/UI/spr_button_hint", 0);
         hintButton.LocalPosition = new Vector2(916, 20);
-        _gameObjects.AddChild(hintButton);
+        gameObjects.AddChild(hintButton);
 
         // add a "retry" button, initially invisible
-        retryButton = new Button("Sprites/UI/spr_button_retry");
+        retryButton = new Button("Sprites/UI/spr_button_retry", 0);
         retryButton.LocalPosition = new Vector2(916, 20);
         retryButton.Visible = false;
-        _gameObjects.AddChild(retryButton);
+        gameObjects.AddChild(retryButton);
 
         // add a "quit" button
-        quitButton = new Button("Sprites/UI/spr_button_quit");
+        quitButton = new Button("Sprites/UI/spr_button_quit", 0);
         quitButton.LocalPosition = new Vector2(1058, 20);
-        _gameObjects.AddChild(quitButton);
+        gameObjects.AddChild(quitButton);
 
         // add an overlay image
-        completedOverlay = new SpriteGameObject("Sprites/spr_level_finished");
-        _gameObjects.AddChild(completedOverlay);
+        completedOverlay = new SpriteGameObject("Sprites/spr_level_finished", 0);
+        gameObjects.AddChild(completedOverlay);
     }
 
     public override void HandleInput(InputHelper inputHelper)
