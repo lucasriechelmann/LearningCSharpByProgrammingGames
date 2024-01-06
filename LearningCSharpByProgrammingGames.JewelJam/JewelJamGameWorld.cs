@@ -72,7 +72,7 @@ public class JewelJamGameWorld : GameState
         playingField.AddChild(new RowSelector(grid));
 
         //add a background sprite for the score object
-        SpriteGameObject scoreFrame = new("spr_scoreframe", 1);
+        SpriteGameObject scoreFrame = new("spr_scoreframe", 0.2f);
         scoreFrame.LocalPosition = new Vector2(20, 20);
         AddChild(scoreFrame);
 
