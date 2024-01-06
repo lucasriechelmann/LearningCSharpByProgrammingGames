@@ -6,11 +6,11 @@ namespace LearningCSharpByProgrammingGames.PenguinPairs.LevelObjects;
 public class Arrow : Button
 {
     SpriteSheet _normalSprite, _hoverSprite;
-    public Arrow(int sheetIndex) : base("Sprites/LevelObjects/spr_arrow1@4", 0)
+    public Arrow(int sheetIndex) : base("Sprites/LevelObjects/spr_arrow1@4", 0.3f)
     {
         SheetIndex = sheetIndex;
         _normalSprite = sprite;
-        _hoverSprite = new("Sprites/LevelObjects/spr_arrow2@4", sheetIndex);        
+        _hoverSprite = new("Sprites/LevelObjects/spr_arrow2@4", 0.3f, sheetIndex);        
     }
     public override void HandleInput(InputHelper inputHelper)
     {

@@ -9,7 +9,7 @@ public class Animal : SpriteGameObject
     protected Point currentGridPosition;
 
     protected Animal(Level level, Point gridPosition, string spriteName, int sheetIndex = 0)
-        : base(spriteName, sheetIndex)
+        : base(spriteName, 0.3f, sheetIndex)
     {
         this.level = level;
         currentGridPosition = gridPosition;

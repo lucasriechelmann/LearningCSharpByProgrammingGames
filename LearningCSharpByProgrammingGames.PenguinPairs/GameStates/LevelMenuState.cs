@@ -19,7 +19,7 @@ public class LevelMenuState : GameState
         gameObjects.AddChild(background);
 
         // add a back button
-        backButton = new Button("Sprites/UI/spr_button_back", 0);
+        backButton = new Button("Sprites/UI/spr_button_back", 0.1f);
         backButton.LocalPosition = new Vector2(415, 720);
         gameObjects.AddChild(backButton);
 

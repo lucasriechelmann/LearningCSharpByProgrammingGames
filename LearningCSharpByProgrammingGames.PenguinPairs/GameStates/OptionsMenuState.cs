@@ -15,24 +15,24 @@ public class  OptionsMenuState : GameState
     {
         AddChild(new SpriteGameObject("Sprites/spr_background_options", 0));        
 
-        _backButton = new Button("Sprites/UI/spr_button_back", 0);
+        _backButton = new Button("Sprites/UI/spr_button_back", 0.1f);
         _backButton.LocalPosition = new Vector2(415, 720);
         AddChild(_backButton);
 
         // add a switch for enabling/disabling hints
         // - text
-        TextGameObject hintsLabel = new TextGameObject("Fonts/MenuFont", 0, Color.DarkBlue);
+        TextGameObject hintsLabel = new TextGameObject("Fonts/MenuFont", 0.1f, Color.DarkBlue);
         hintsLabel.Text = "Hints";
         hintsLabel.LocalPosition = new Vector2(150, 340);
         AddChild(hintsLabel);
         // - switch
-        _hintsSwitch = new Switch("Sprites/UI/spr_switch@2", 0);
+        _hintsSwitch = new Switch("Sprites/UI/spr_switch@2", 0.1f);
         _hintsSwitch.LocalPosition = new Vector2(650, 340);
         AddChild(_hintsSwitch);
 
         // add a slider to control the background music volume
         // - text
-        TextGameObject musicVolumeLabel = new TextGameObject("Fonts/MenuFont", 0, Color.DarkBlue);
+        TextGameObject musicVolumeLabel = new TextGameObject("Fonts/MenuFont", 0.1f, Color.DarkBlue);
         musicVolumeLabel.Text = "Music Volume";
         musicVolumeLabel.LocalPosition = new Vector2(150, 480);
         AddChild(musicVolumeLabel);

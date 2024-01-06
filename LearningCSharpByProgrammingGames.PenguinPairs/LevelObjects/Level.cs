@@ -62,7 +62,7 @@ public class Level : GameObjectList
         int hintX = int.Parse(hint[0]);
         int hintY = int.Parse(hint[1]);
         int hintDirection = StringToDirection(hint[2]);
-        hintArrow = new SpriteGameObject("Sprites/LevelObjects/spr_arrow_hint@4", hintDirection);
+        hintArrow = new SpriteGameObject("Sprites/LevelObjects/spr_arrow_hint@4", 0.3f, hintDirection);
         hintArrow.LocalPosition = GetCellPosition(hintX, hintY);
 
         // read the rows of the grid; keep track of the longest row
@@ -100,13 +100,13 @@ public class Level : GameObjectList
         AddChild(infoBackground);
 
         // - title text
-        TextGameObject titleText = new TextGameObject("Fonts/HelpFont", 0, Color.Blue, TextGameObject.Alignment.Center);
+        TextGameObject titleText = new TextGameObject("Fonts/HelpFont", 0.1f, Color.Blue, TextGameObject.Alignment.Center);
         titleText.Text = LevelIndex + " - " + title;
         titleText.LocalPosition = new Vector2(600, 786);
         AddChild(titleText);
 
         // - description text
-        TextGameObject descriptionText = new TextGameObject("Fonts/HelpFont", 0, Color.DarkBlue, TextGameObject.Alignment.Center);
+        TextGameObject descriptionText = new TextGameObject("Fonts/HelpFont", 0.2f, Color.DarkBlue, TextGameObject.Alignment.Center);
         descriptionText.Text = description;
         descriptionText.LocalPosition = new Vector2(600, 820);
         AddChild(descriptionText);

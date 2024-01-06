@@ -17,14 +17,14 @@ public class PairList : GameObjectList
     public PairList(int nrPairs)
     {
         // add the background image
-        AddChild(new SpriteGameObject("Sprites/spr_frame_goal", 0));
+        AddChild(new SpriteGameObject("Sprites/spr_frame_goal", 0.3f));
 
         // add a sprite object for each pair that the player should make
         Vector2 offset = new Vector2(100, 7);
         pairObjects = new SpriteGameObject[nrPairs];
         for (int i = 0; i < nrPairs; i++)
         {
-            pairObjects[i] = new SpriteGameObject("Sprites/spr_penguin_pairs@8", 7);
+            pairObjects[i] = new SpriteGameObject("Sprites/spr_penguin_pairs@8", 0.4f, 7);
             pairObjects[i].LocalPosition = offset + new Vector2(i * pairObjects[i].Width, 0);
             AddChild(pairObjects[i]);
         }

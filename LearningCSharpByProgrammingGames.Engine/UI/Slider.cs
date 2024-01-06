@@ -23,11 +23,11 @@ public class Slider : GameObjectList
         float minValue, float maxValue, float padding)
     {
         // add the background image
-        back = new SpriteGameObject(backgroundSprite, 0.9f);
+        back = new SpriteGameObject(backgroundSprite, 0.1f);
         AddChild(back);
 
         // add the foreground image, with a custom origin
-        front = new SpriteGameObject(foregroundSprite, 0.95f);
+        front = new SpriteGameObject(foregroundSprite, 0.1f);
         front.Origin = new Vector2(front.Width / 2, 0);
         AddChild(front);
 

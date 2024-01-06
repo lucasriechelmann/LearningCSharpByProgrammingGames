@@ -20,23 +20,23 @@ public class PlayingState : GameState
         gameObjects.AddChild(background);
 
         // add a "hint" button
-        hintButton = new Button("Sprites/UI/spr_button_hint", 0);
+        hintButton = new Button("Sprites/UI/spr_button_hint", 0.1f);
         hintButton.LocalPosition = new Vector2(916, 20);
         gameObjects.AddChild(hintButton);
 
         // add a "retry" button, initially invisible
-        retryButton = new Button("Sprites/UI/spr_button_retry", 0);
+        retryButton = new Button("Sprites/UI/spr_button_retry", 0.1f);
         retryButton.LocalPosition = new Vector2(916, 20);
         retryButton.Visible = false;
         gameObjects.AddChild(retryButton);
 
         // add a "quit" button
-        quitButton = new Button("Sprites/UI/spr_button_quit", 0);
+        quitButton = new Button("Sprites/UI/spr_button_quit", 0.1f);
         quitButton.LocalPosition = new Vector2(1058, 20);
         gameObjects.AddChild(quitButton);
 
         // add an overlay image
-        completedOverlay = new SpriteGameObject("Sprites/spr_level_finished", 0);
+        completedOverlay = new SpriteGameObject("Sprites/spr_level_finished", 0.9f);
         gameObjects.AddChild(completedOverlay);
     }
 
