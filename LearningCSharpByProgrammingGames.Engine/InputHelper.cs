@@ -66,4 +66,23 @@ public class InputHelper
     {
         return currentKeyboardState.IsKeyDown(k) && previousKeyboardState.IsKeyUp(k);
     }
+    /// <summary>
+    /// Checks and returns whether the player has stopped pressing a certain keyboard key in the last frame of the game loop.
+    /// </summary>
+    /// <param name="k">The key to check.</param>
+    /// <returns>true if the given key is no longer pressed but was still pressed in the previous frame; false otherwise.</returns>
+    public bool KeyReleased(Keys k)
+    {
+        return currentKeyboardState.IsKeyUp(k) && previousKeyboardState.IsKeyDown(k);
+    }
+
+    /// <summary>
+    /// Checks and returns whether the player is currently holding a certain keyboard key down.
+    /// </summary>
+    /// <param name="k">The key to check.</param>
+    /// <returns>true if the given key is currently being held down; false otherwise.</returns>
+    public bool KeyDown(Keys k)
+    {
+        return currentKeyboardState.IsKeyDown(k);
+    }
 }
