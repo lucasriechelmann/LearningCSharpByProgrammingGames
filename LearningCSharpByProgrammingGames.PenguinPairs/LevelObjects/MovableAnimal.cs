@@ -29,7 +29,7 @@ public class MovableAnimal : Animal
         private set
         {
             isInHole = value;
-            sprite = new SpriteSheet(GetSpriteName(isInHole), AnimalIndex);
+            sprite = new SpriteSheet(GetSpriteName(isInHole), 0.3f, AnimalIndex);
         }
     }
 
@@ -46,10 +46,13 @@ public class MovableAnimal : Animal
     {
         currentGridPosition = startPosition;
         IsInHole = false;
+        Visible = true;
 
         base.Reset();
 
+        LocalPosition = level.GetCellPosition(currentGridPosition.X, currentGridPosition.Y);
         targetWorldPosition = LocalPosition;
+        level.AddAnimalToGrid(this, currentGridPosition);
     }
 
     bool IsPairWith(MovableAnimal other)
