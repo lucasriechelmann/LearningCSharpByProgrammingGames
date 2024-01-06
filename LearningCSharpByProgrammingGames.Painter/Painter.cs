@@ -11,43 +11,35 @@ namespace LearningCSharpByProgrammingGames.Painter
         static GameWorld _gameWorld;
         public static GameWorld GameWorld => _gameWorld;
         public static Vector2 ScreenSize { get; set; }
-        public Painter()
+        public Painter() 
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
             IsMouseVisible = true;
             
         }
 
         protected override void Initialize()
-        {
+        {            
             Window.Title = "Painter";
-            ScreenSize = new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            worldSize = new Point(800, 480);
+            windowSize = new Point(800, 480);
+            ScreenSize = new Vector2(windowSize.X, windowSize.Y);
             base.Initialize();
         }
-
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _inputHelper = new InputHelper(this);
+            base.LoadContent();
             _gameWorld = new GameWorld(Content);
         }
-
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            _inputHelper.Update();
+            base.Update(gameTime);
             _gameWorld.HandleInput(_inputHelper);
             _gameWorld.Update(gameTime);
         }
-        
-
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            _gameWorld.Draw(gameTime, _spriteBatch);
+            //base.Draw(gameTime);
+            _gameWorld.Draw(gameTime, _spriteBatch);            
         }
     }
 }
