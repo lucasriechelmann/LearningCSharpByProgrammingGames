@@ -86,7 +86,7 @@ public class JewelJamGameWorld : GameState
         AddChild(_jewelCart);
 
         //add help button
-        _helpButton = new("spr_button_help", 0);
+        _helpButton = new("spr_button_help", 0.3f);
         _helpButton.LocalPosition = new Vector2(1270, 20);
         AddChild(_helpButton);
 
@@ -94,9 +94,9 @@ public class JewelJamGameWorld : GameState
         _timerDouble = AddcomboImageWithTime("spr_double");
         _timerTriple = AddcomboImageWithTime("spr_triple");
 
-        _titleScreen = AddOverlay("spr_title", 2);
-        _gameOverScreen = AddOverlay("spr_gameover", 2);
-        _helpScreen = AddOverlay("spr_frame_help", 2);
+        _titleScreen = AddOverlay("spr_title", 0.9f);
+        _gameOverScreen = AddOverlay("spr_gameover", 0.9f);
+        _helpScreen = AddOverlay("spr_frame_help", 0.9f);
 
         ExtendedGame.AssetManager.PlaySong("snd_music", true);
 
@@ -141,7 +141,7 @@ public class JewelJamGameWorld : GameState
         }
         
     }
-    SpriteGameObject AddOverlay(string spriteName, int depht)
+    SpriteGameObject AddOverlay(string spriteName, float depht)
     {
         SpriteGameObject overlay = new(spriteName, depht);
         overlay.SetOriginToCenter();
@@ -152,7 +152,7 @@ public class JewelJamGameWorld : GameState
     VisibilityTimer AddcomboImageWithTime(string spriteName)
     {
         // create and add the image
-        SpriteGameObject image = new(spriteName, 0);
+        SpriteGameObject image = new(spriteName, 0.3f);
         image.Visible = false;
         image.LocalPosition = new Vector2(800, 400);
         AddChild(image);

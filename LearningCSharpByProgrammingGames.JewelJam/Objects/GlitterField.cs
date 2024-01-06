@@ -101,7 +101,7 @@ public class GlitterField : GameObject
 
             // draw the glitter at its current scale
             spriteBatch.Draw(_glitter, GlobalPosition + _positions[i], null,
-                Color.White, 0f, glitterCenter, scale, SpriteEffects.None, 0);
+                Color.White, 0f, glitterCenter, scale, SpriteEffects.None, 0.3f);
         }
     }
 }

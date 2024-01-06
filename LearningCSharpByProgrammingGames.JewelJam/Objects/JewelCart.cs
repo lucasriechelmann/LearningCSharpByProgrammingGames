@@ -16,7 +16,7 @@ public class JewelCart : SpriteGameObject
     float startX;
     GlitterField _glitters;
     public JewelCart(Vector2 startPosition)
-        : base("spr_jewelcart", 1)
+        : base("spr_jewelcart", 0.3f)
     {
         LocalPosition = startPosition;
         startX = startPosition.X;

@@ -8,7 +8,7 @@ public class RowSelector : SpriteGameObject
 {
     int _selectedRow;
     JewelGrid _grid;
-    public RowSelector(JewelGrid grid) : base("spr_selector_frame", 1)
+    public RowSelector(JewelGrid grid) : base("spr_selector_frame", 0.3f)
     {
         _grid = grid;
         _selectedRow = 0;

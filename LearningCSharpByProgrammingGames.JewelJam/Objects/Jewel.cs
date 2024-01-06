@@ -14,7 +14,7 @@ public class Jewel : SpriteGameObject
     /// <summary>
     /// Creates a new Jewel of a random type.
     /// </summary>
-    public Jewel() : base("spr_jewels", 27, 2)
+    public Jewel() : base("spr_jewels", 0.3f, 0)
     {
         ColorType = ExtendedGame.Random.Next(3);
         ShapeType = ExtendedGame.Random.Next(3);
