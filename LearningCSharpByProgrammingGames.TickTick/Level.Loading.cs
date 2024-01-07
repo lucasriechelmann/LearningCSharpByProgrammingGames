@@ -134,8 +134,7 @@ public partial class Level : GameObjectList
     void LoadCharacter(int x, int y)
     {
         // create the bomb character
-        Player = new Player(this);
-        Player.LocalPosition = GetCellBottomCenter(x, y);
+        Player = new Player(this, GetCellBottomCenter(x, y));
         AddChild(Player);
     }
 
@@ -151,10 +150,9 @@ public partial class Level : GameObjectList
 
     void LoadWaterDrop(int x, int y)
     {
-        // create the water drop object
-        WaterDrop w = new WaterDrop();
-        // place it around the center of the tile
-        w.LocalPosition = GetCellPosition(x, y) + new Vector2(TileWidth / 2, TileHeight / 3);
+        // create the water drop object;  place it around the center of the tile
+        Vector2 pos = GetCellPosition(x, y) + new Vector2(TileWidth / 2, TileHeight / 3);
+        WaterDrop w = new WaterDrop(this, pos);
         // add it to the game world
         AddChild(w);
         // store an extra reference to it

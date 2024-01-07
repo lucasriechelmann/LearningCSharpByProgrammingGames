@@ -25,12 +25,21 @@ public class Player : AnimatedGameObject
     float desiredHorizontalSpeed; // The horizontal speed at which the character would like to move.
 
     Level level;
+    Vector2 startPosition;
+
+    bool isCelebrating; // Whether or not the player is celebrating a level victory.
+    bool isExploding;
+
+    public bool IsAlive { get; private set; }
+
+    public bool CanCollideWithObjects { get { return IsAlive && !isCelebrating; } }
 
     public bool IsMoving { get { return velocity != Vector2.Zero; } }
 
-    public Player(Level level) : base(TickTickGame.Depth_LevelPlayer)
+    public Player(Level level, Vector2 startPosition) : base(TickTickGame.Depth_LevelPlayer)
     {
         this.level = level;
+        this.startPosition = startPosition;
 
         // load all animations
         LoadAnimation("Sprites/LevelObjects/Player/spr_idle", "idle", true, 0.1f);
@@ -40,16 +49,33 @@ public class Player : AnimatedGameObject
         LoadAnimation("Sprites/LevelObjects/Player/spr_die@5", "die", true, 0.1f);
         LoadAnimation("Sprites/LevelObjects/Player/spr_explode@5x5", "explode", false, 0.04f);
 
+        Reset();
+    }
+
+    public override void Reset()
+    {
+        // go back to the starting position
+        localPosition = startPosition;
+        velocity = Vector2.Zero;
+        desiredHorizontalSpeed = 0;
+
         // start with the idle sprite
-        PlayAnimation("idle");
+        PlayAnimation("idle", true);
         SetOriginToBottomCenter();
         facingLeft = false;
         isGrounded = true;
         standingOnIceTile = standingOnHotTile = false;
+
+        IsAlive = true;
+        isExploding = false;
+        isCelebrating = false;
     }
 
     public override void HandleInput(InputHelper inputHelper)
     {
+        if (!CanCollideWithObjects)
+            return;
+
         // arrow keys: move left or right
         if (inputHelper.KeyDown(Keys.Left))
         {
@@ -94,6 +120,8 @@ public class Player : AnimatedGameObject
         velocity.Y = -speed;
         // play the jump animation; always make sure that the animation restarts
         PlayAnimation("jump", true);
+        // play a sound
+        ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_player_jump");
     }
 
     /// <summary>
@@ -113,6 +141,34 @@ public class Player : AnimatedGameObject
     {
         Vector2 previousPosition = localPosition;
 
+        if (CanCollideWithObjects)
+            ApplyFriction(gameTime);
+        else
+            velocity.X = 0;
+
+        if (!isExploding)
+            ApplyGravity(gameTime);
+
+        base.Update(gameTime);
+
+        if (IsAlive)
+        {
+            // check for collisions with tiles
+            HandleTileCollisions(previousPosition);
+            // check if we've fallen down through the level
+            if (BoundingBox.Center.Y > level.BoundingBox.Bottom)
+                Die();
+
+            if (standingOnHotTile)
+                level.Timer.Multiplier = 2;
+            else
+                level.Timer.Multiplier = 1;
+        }
+
+    }
+
+    void ApplyFriction(GameTime gameTime)
+    {
         // determine the friction coefficient for the character
         float friction;
         if (standingOnIceTile)
@@ -129,11 +185,6 @@ public class Player : AnimatedGameObject
         velocity.X += (desiredHorizontalSpeed - velocity.X) * multiplier;
         if (Math.Abs(velocity.X) < 1)
             velocity.X = 0;
-
-        ApplyGravity(gameTime);
-        base.Update(gameTime);
-
-        HandleTileCollisions(previousPosition);
     }
 
     void ApplyGravity(GameTime gameTime)
@@ -231,6 +282,35 @@ public class Player : AnimatedGameObject
 
     public void Die()
     {
-        // TODO: This method will be filled in the next chapter.
+        IsAlive = false;
+        PlayAnimation("die");
+        velocity = new Vector2(0, -jumpSpeed);
+        level.Timer.Running = false;
+
+        ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_player_die");
+    }
+
+    public void Explode()
+    {
+        IsAlive = false;
+        isExploding = true;
+        PlayAnimation("explode");
+        velocity = Vector2.Zero;
+
+        ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_player_explode");
+    }
+
+    /// <summary>
+    /// Lets this Player object start celebrating due to completing a level.
+    /// The Player will show an animation, and it will stop responding to keyboard input.
+    /// </summary>
+    public void Celebrate()
+    {
+        isCelebrating = true;
+        PlayAnimation("celebrate");
+        SetOriginToBottomCenter();
+
+        // stop moving
+        velocity = Vector2.Zero;
     }
 }

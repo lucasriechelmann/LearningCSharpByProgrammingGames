@@ -1,8 +1,10 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
+using LearningCSharpByProgrammingGames.Engine.Levels;
 using LearningCSharpByProgrammingGames.TickTick.LevelObjects;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace LearningCSharpByProgrammingGames.TickTick;
 public partial class Level : GameObjectList
@@ -17,6 +19,9 @@ public partial class Level : GameObjectList
     public int LevelIndex { get; private set; }
 
     SpriteGameObject goal;
+    BombTimer timer;
+
+    bool completionDetected;
 
     public Level(int levelIndex, string filename)
     {
@@ -27,10 +32,32 @@ public partial class Level : GameObjectList
         SpriteGameObject backgroundSky = new SpriteGameObject("Sprites/Backgrounds/spr_sky", TickTickGame.Depth_Background);
         backgroundSky.LocalPosition = new Vector2(0, 825 - backgroundSky.Height);
         backgrounds.AddChild(backgroundSky);
+
         AddChild(backgrounds);
 
         // load the rest of the level
         LoadLevelFromFile(filename);
+
+        // add the timer
+        timer = new BombTimer();
+        AddChild(timer);
+
+        // add mountains in the background
+        for (int i = 0; i < 4; i++)
+        {
+            SpriteGameObject mountain = new SpriteGameObject(
+                "Sprites/Backgrounds/spr_mountain_" + (ExtendedGame.Random.Next(2) + 1),
+                TickTickGame.Depth_Background + 0.01f * (float)ExtendedGame.Random.NextDouble());
+
+            mountain.LocalPosition = new Vector2(mountain.Width * (i - 1) * 0.4f,
+                BoundingBox.Height - mountain.Height);
+
+            backgrounds.AddChild(mountain);
+        }
+
+        // add clouds
+        for (int i = 0; i < 6; i++)
+            backgrounds.AddChild(new Cloud(this));
     }
 
     public Rectangle BoundingBox
@@ -42,6 +69,8 @@ public partial class Level : GameObjectList
                 tiles.GetLength(1) * TileHeight);
         }
     }
+
+    public BombTimer Timer { get { return timer; } }
 
     public Vector2 GetCellPosition(int x, int y)
     {
@@ -76,6 +105,48 @@ public partial class Level : GameObjectList
 
         // Otherwise, return the actual surface type of the tile.
         return tiles[x, y].Surface;
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        // check if we've finished the level
+        if (!completionDetected && AllDropsCollected && Player.HasPixelPreciseCollision(goal))
+        {
+            completionDetected = true;
+            ExtendedGameWithLevels.GetPlayingState().LevelCompleted(LevelIndex);
+            Player.Celebrate();
+
+            // stop the timer
+            timer.Running = false;
+        }
+
+        // check if the timer has passed
+        else if (Player.IsAlive && timer.HasPassed)
+        {
+            Player.Explode();
+        }
+    }
+
+    /// <summary>
+    /// Checks and returns whether the player has collected all water drops in this level.
+    /// </summary>
+    bool AllDropsCollected
+    {
+        get
+        {
+            foreach (WaterDrop drop in waterDrops)
+                if (drop.Visible)
+                    return false;
+            return true;
+        }
+    }
+
+    public override void Reset()
+    {
+        base.Reset();
+        completionDetected = false;
     }
 }
 
