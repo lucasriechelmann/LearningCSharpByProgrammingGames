@@ -1,5 +1,6 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
 using LearningCSharpByProgrammingGames.TickTick.LevelObjects;
+using LearningCSharpByProgrammingGames.TickTick.LevelObjects.Enemies;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.IO;
@@ -99,7 +100,14 @@ public partial class Level : GameObjectList
             LoadGoal(x, y);
         else if (symbol == 'W')
             LoadWaterDrop(x, y);
-        // TODO: other cases
+        else if (symbol == 'R')
+            LoadRocketEnemy(x, y);
+        else if (symbol == 'T')
+            LoadTurtleEnemy(x, y);
+        else if (symbol == 'S')
+            LoadSparkyEnemy(x, y);
+        else if (symbol == 'A' || symbol == 'B' || symbol == 'C')
+            LoadFlameEnemy(x, y, symbol);
     }
 
     Tile CharToStaticTile(char symbol)
@@ -125,13 +133,17 @@ public partial class Level : GameObjectList
 
     void LoadCharacter(int x, int y)
     {
-        // TODO: create the bomb character
+        // create the bomb character
+        Player = new Player(this);
+        Player.LocalPosition = GetCellBottomCenter(x, y);
+        AddChild(Player);
     }
 
     void LoadGoal(int x, int y)
     {
         // create the exit object
         goal = new SpriteGameObject("Sprites/LevelObjects/spr_goal", TickTickGame.Depth_LevelObjects);
+        // make sure it's standing exactly on the tile below
         goal.LocalPosition = GetCellPosition(x, y + 1);
         goal.Origin = new Vector2(0, goal.Height);
         AddChild(goal);
@@ -147,5 +159,44 @@ public partial class Level : GameObjectList
         AddChild(w);
         // store an extra reference to it
         waterDrops.Add(w);
+    }
+
+    void LoadRocketEnemy(int x, int y)
+    {
+        Rocket r = new Rocket(this, GetCellPosition(x, y), x != 0);
+        AddChild(r);
+    }
+
+    void LoadTurtleEnemy(int x, int y)
+    {
+        Turtle t = new Turtle(this);
+        t.LocalPosition = GetCellBottomCenter(x, y);
+        AddChild(t);
+    }
+
+    void LoadSparkyEnemy(int x, int y)
+    {
+        Sparky s = new Sparky(this, GetCellBottomCenter(x, y));
+        AddChild(s);
+    }
+
+    void LoadFlameEnemy(int x, int y, char symbol)
+    {
+        Vector2 pos = GetCellBottomCenter(x, y);
+
+        PatrollingEnemy enemy;
+        if (symbol == 'A')
+            enemy = new PatrollingEnemy(this, pos);
+        else if (symbol == 'B')
+            enemy = new PlayerFollowingEnemy(this, pos);
+        else
+            enemy = new UnpredictableEnemy(this, pos);
+
+        AddChild(enemy);
+    }
+
+    Vector2 GetCellBottomCenter(int x, int y)
+    {
+        return GetCellPosition(x, y + 1) + new Vector2(TileWidth / 2, 0);
     }
 }
