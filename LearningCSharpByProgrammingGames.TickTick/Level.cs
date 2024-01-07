@@ -4,7 +4,8 @@ using LearningCSharpByProgrammingGames.TickTick.LevelObjects;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-partial class Level : GameObjectList
+namespace LearningCSharpByProgrammingGames.TickTick;
+public partial class Level : GameObjectList
 {
     public const int TileWidth = 72;
     public const int TileHeight = 55;
@@ -27,7 +28,7 @@ partial class Level : GameObjectList
         AddChild(backgrounds);
 
         // load the rest of the level
-        //LoadLevelFromFile(filename);
+        LoadLevelFromFile(filename);
     }
 
     public Vector2 GetCellPosition(int x, int y)
@@ -35,3 +36,4 @@ partial class Level : GameObjectList
         return new Vector2(x * TileWidth, y * TileHeight);
     }
 }
+

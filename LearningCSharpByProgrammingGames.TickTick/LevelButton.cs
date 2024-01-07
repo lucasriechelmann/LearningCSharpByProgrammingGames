@@ -1,8 +1,8 @@
 ﻿using LearningCSharpByProgrammingGames.Engine;
 using LearningCSharpByProgrammingGames.Engine.Levels;
 using Microsoft.Xna.Framework;
-
-public class LevelButton : LearningCSharpByProgrammingGames.Engine.Levels.LevelButton
+namespace LearningCSharpByProgrammingGames.TickTick;
+public class LevelButton : Engine.Levels.LevelButton
 {
     public LevelButton(int levelIndex, LevelStatus startStatus)
         : base(levelIndex, startStatus)
